@@ -412,23 +412,23 @@ h3 {
 .service-link-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px;
-    border: 1px solid hsl(var(--border));
-    border-radius: var(--radius);
-    background: hsl(var(--surface));
-    box-shadow: 0 16px 40px hsl(221 34% 8% / 0.08);
-    padding: 24px;
+    gap: 16px;
 }
 
 .service-link {
     display: grid;
     align-content: start;
     gap: 12px;
-    padding-top: 0;
-    transition: color 150ms ease, transform 150ms ease;
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    background: hsl(var(--surface));
+    box-shadow: 0 16px 40px hsl(221 34% 8% / 0.08);
+    padding: 20px;
+    transition: border-color 150ms ease, color 150ms ease, transform 150ms ease;
 }
 
 .service-link:hover {
+    border-color: hsl(var(--brand) / 0.35);
     color: hsl(var(--foreground));
     transform: translateY(-2px);
 }
