@@ -38,7 +38,7 @@
                     </div>
                     <div class="field">
                         <label>Resi dipilih</label>
-                        <input class="input" name="receipts[]" value="{{ old('receipts.0') }}">
+                        <input class="input" name="manual_receipt" value="{{ old('manual_receipt') }}">
                         <p class="helper">Bisa isi manual atau centang dari tabel.</p>
                     </div>
                     <div class="field full">

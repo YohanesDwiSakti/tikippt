@@ -200,10 +200,21 @@ Route::post('/admin/assignments', function (Request $request, SupabaseGateway $s
         return $redirect;
     }
 
+    $receipts = collect($request->input('receipts', []))
+        ->push($request->input('manual_receipt'))
+        ->filter(fn ($receipt): bool => trim((string) $receipt) !== '')
+        ->map(fn ($receipt): string => strtoupper(trim((string) $receipt)))
+        ->unique()
+        ->values()
+        ->all();
+
+    $request->merge(['receipts' => $receipts]);
+
     $data = $request->validate([
         'driver_id' => ['required', 'string'],
         'receipts' => ['required', 'array', 'min:1'],
         'receipts.*' => ['required', 'string'],
+        'manual_receipt' => ['nullable', 'string'],
         'note' => ['nullable', 'string', 'max:500'],
     ]);
 
