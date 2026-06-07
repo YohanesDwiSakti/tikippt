@@ -402,7 +402,7 @@ h3 {
 .section-muted {
     border-top: 1px solid hsl(var(--border));
     border-bottom: 1px solid hsl(var(--border));
-    background: hsl(var(--muted));
+    background: hsl(var(--background));
 }
 
 .grid-3 {
