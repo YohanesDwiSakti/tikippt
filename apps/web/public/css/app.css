@@ -439,10 +439,23 @@ h3 {
 }
 
 .about-layout,
-.support-layout {
+.support-layout,
+.map-layout {
     display: grid;
     grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
     gap: 16px;
+}
+
+.map-panel {
+    padding: 0;
+    overflow: hidden;
+}
+
+.map-panel iframe {
+    display: block;
+    width: 100%;
+    min-height: 320px;
+    border: 0;
 }
 
 .check-list {
@@ -827,6 +840,7 @@ h3 {
     .process-grid,
     .about-layout,
     .support-layout,
+    .map-layout,
     .form-grid,
     .rate-grid,
     .location-grid {

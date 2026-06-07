@@ -55,10 +55,36 @@
         </section>
 
         <section class="section-tight">
-            <article class="panel panel-muted">
-                <h2>Area operasional</h2>
-                <p class="helper">Fokus layanan saat ini adalah Denpasar dan area sekitar seperti Sanur, Gianyar, Ubud, dan Tabanan. Informasi lokasi dan jam operasional dapat dilihat pada tab Cek Lokasi di halaman Layanan.</p>
-            </article>
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Area operasional</p>
+                    <h2>Cek wilayah layanan secara visual</h2>
+                    <p>Gunakan peta untuk melihat cakupan Denpasar dan area sekitar yang menjadi fokus layanan.</p>
+                </div>
+            </div>
+            <div class="map-layout">
+                <article class="panel map-panel">
+                    <iframe
+                        title="Peta area operasional TIKI Denpasar"
+                        src="https://www.openstreetmap.org/export/embed.html?bbox=115.091%2C-8.788%2C115.344%2C-8.552&layer=mapnik&marker=-8.6705%2C115.2126"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </article>
+                <article class="panel panel-muted">
+                    <h3>Area yang dilayani</h3>
+                    <ul class="check-list">
+                        <li>Denpasar sebagai hub utama pemrosesan paket.</li>
+                        <li>Sanur untuk drop paket dan pengambilan paket area pesisir.</li>
+                        <li>Gianyar dan Ubud untuk pengantaran rute harian.</li>
+                        <li>Tabanan sebagai cakupan estimasi layanan sekitar.</li>
+                    </ul>
+                    <div class="section-tight">
+                        <a class="button button-primary" href="{{ route('tracking', ['tab' => 'lokasi']) }}">Cek Lokasi Gerai</a>
+                        <a class="button button-secondary" href="https://www.openstreetmap.org/?mlat=-8.6705&mlon=115.2126#map=11/-8.6705/115.2126">Buka Peta Besar</a>
+                    </div>
+                </article>
+            </div>
         </section>
     </section>
 @endsection
