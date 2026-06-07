@@ -13,11 +13,11 @@
         </div>
 
         <div class="about-layout">
-            <article class="panel">
+            <article class="text-block">
                 <h2>Tentang layanan ini</h2>
                 <p class="helper">Layanan ini dibuat untuk mengurangi kebingungan saat paket sedang berjalan. Customer dapat mengecek informasi dasar secara mandiri, sementara tim hub memiliki alur yang lebih rapi untuk membagi paket ke driver dan menyimpan bukti pengantaran.</p>
             </article>
-            <article class="panel panel-muted">
+            <article class="muted-block">
                 <h2>Yang bisa dilakukan</h2>
                 <ul class="check-list">
                     <li>Melihat status paket berdasarkan nomor resi.</li>
@@ -35,21 +35,27 @@
                     <h2>Informasi yang disiapkan untuk customer</h2>
                 </div>
             </div>
-            <div class="grid-3">
-                <article class="panel">
+            <div class="info-list">
+                <article class="info-item">
                     <span class="badge badge-brand">Status</span>
-                    <h3 style="margin-top: 16px;">Pergerakan paket</h3>
-                    <p class="helper">Customer melihat posisi terakhir, riwayat status, tujuan, dan waktu pembaruan paket.</p>
+                    <div>
+                        <h3>Pergerakan paket</h3>
+                        <p class="helper">Customer melihat posisi terakhir, riwayat status, tujuan, dan waktu pembaruan paket.</p>
+                    </div>
                 </article>
-                <article class="panel">
+                <article class="info-item">
                     <span class="badge badge-brand">Harga</span>
-                    <h3 style="margin-top: 16px;">Estimasi biaya</h3>
-                    <p class="helper">Perkiraan ongkir membantu customer memilih layanan sesuai kebutuhan dan berat paket.</p>
+                    <div>
+                        <h3>Estimasi biaya</h3>
+                        <p class="helper">Perkiraan ongkir membantu customer memilih layanan sesuai kebutuhan dan berat paket.</p>
+                    </div>
                 </article>
-                <article class="panel">
+                <article class="info-item">
                     <span class="badge badge-brand">Bukti</span>
-                    <h3 style="margin-top: 16px;">Konfirmasi sampai</h3>
-                    <p class="helper">Saat paket diterima, bukti berupa foto, waktu, lokasi, dan catatan driver dapat dicatat.</p>
+                    <div>
+                        <h3>Konfirmasi sampai</h3>
+                        <p class="helper">Saat paket diterima, bukti berupa foto, waktu, lokasi, dan catatan driver dapat dicatat.</p>
+                    </div>
                 </article>
             </div>
         </section>
@@ -63,7 +69,7 @@
                 </div>
             </div>
             <div class="map-layout">
-                <article class="panel map-panel">
+                <article class="map-panel">
                     <iframe
                         title="Peta area operasional TIKI Denpasar"
                         src="https://www.openstreetmap.org/export/embed.html?bbox=115.091%2C-8.788%2C115.344%2C-8.552&layer=mapnik&marker=-8.6705%2C115.2126"
@@ -71,7 +77,7 @@
                         referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
                 </article>
-                <article class="panel panel-muted">
+                <article class="map-copy">
                     <h3>Area yang dilayani</h3>
                     <ul class="check-list">
                         <li>Denpasar sebagai hub utama pemrosesan paket.</li>

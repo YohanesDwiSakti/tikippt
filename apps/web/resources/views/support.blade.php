@@ -13,7 +13,7 @@
         </div>
 
         <div class="support-layout">
-            <article class="panel">
+            <article class="support-block">
                 <span class="badge badge-brand">Customer Care</span>
                 <h2 style="margin-top: 16px;">Kontak utama</h2>
                 <div class="contact-list">
@@ -24,7 +24,7 @@
                 </div>
             </article>
 
-            <article class="panel panel-muted">
+            <article class="support-note">
                 <h2>Jam layanan</h2>
                 <div class="meta-grid">
                     <div class="meta-item">
@@ -48,21 +48,27 @@
         </div>
 
         <section class="section-tight">
-            <div class="grid-3">
-                <article class="panel">
+            <div class="info-list">
+                <article class="info-item">
                     <span class="badge badge-brand">Resi</span>
-                    <h3 style="margin-top: 16px;">Sebelum menghubungi</h3>
-                    <p class="helper">Siapkan nomor resi, nama penerima, area tujuan, dan status terakhir yang terlihat di halaman layanan.</p>
+                    <div>
+                        <h3>Sebelum menghubungi</h3>
+                        <p class="helper">Siapkan nomor resi, nama penerima, area tujuan, dan status terakhir yang terlihat di halaman layanan.</p>
+                    </div>
                 </article>
-                <article class="panel">
+                <article class="info-item">
                     <span class="badge badge-brand">Admin</span>
-                    <h3 style="margin-top: 16px;">Koreksi data paket</h3>
-                    <p class="helper">Untuk perubahan status, tujuan, atau driver, hubungi admin hub dan sertakan alasan koreksi.</p>
+                    <div>
+                        <h3>Koreksi data paket</h3>
+                        <p class="helper">Untuk perubahan status, tujuan, atau driver, hubungi admin hub dan sertakan alasan koreksi.</p>
+                    </div>
                 </article>
-                <article class="panel">
+                <article class="info-item">
                     <span class="badge badge-brand">Driver</span>
-                    <h3 style="margin-top: 16px;">Kendala pengantaran</h3>
-                    <p class="helper">Laporkan alamat tidak ditemukan, penerima tidak di tempat, atau bukti foto gagal upload.</p>
+                    <div>
+                        <h3>Kendala pengantaran</h3>
+                        <p class="helper">Laporkan alamat tidak ditemukan, penerima tidak di tempat, atau bukti foto gagal upload.</p>
+                    </div>
                 </article>
             </div>
         </section>

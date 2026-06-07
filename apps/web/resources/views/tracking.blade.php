@@ -104,7 +104,7 @@
                             <article class="panel">
                                 <span class="badge badge-brand">{{ $rate['service'] }}</span>
                                 <h3 style="margin-top: 16px;">{{ $rate['label'] }}</h3>
-                                <p class="helper">{{ $origin }} ke {{ $destination }} · {{ $rate['eta'] }}</p>
+                                <p class="helper">{{ $origin }} ke {{ $destination }} - {{ $rate['eta'] }}</p>
                                 <div class="price">Rp{{ number_format($rate['price'], 0, ',', '.') }}</div>
                             </article>
                         @endforeach

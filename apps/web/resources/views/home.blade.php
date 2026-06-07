@@ -30,25 +30,22 @@
                 </div>
             </div>
 
-            <div class="grid-3">
-                <article class="panel">
+            <div class="service-link-grid">
+                <a class="service-link" href="{{ route('tracking', ['tab' => 'resi']) }}">
                     <span class="badge badge-brand">Resi</span>
-                    <h3 style="margin-top: 16px;">Status kiriman</h3>
-                    <p class="helper">Lihat posisi terakhir, riwayat status, tujuan, driver, dan bukti diterima jika sudah tersedia.</p>
-                    <a class="button button-secondary" href="{{ route('tracking', ['tab' => 'resi']) }}">Buka Cek Resi</a>
-                </article>
-                <article class="panel">
+                    <strong>Status kiriman</strong>
+                    <span>Lihat posisi terakhir, riwayat status, tujuan, driver, dan bukti diterima jika sudah tersedia.</span>
+                </a>
+                <a class="service-link" href="{{ route('tracking', ['tab' => 'harga']) }}">
                     <span class="badge badge-brand">Harga</span>
-                    <h3 style="margin-top: 16px;">Estimasi ongkir</h3>
-                    <p class="helper">Masukkan asal, tujuan, berat, dan dimensi untuk melihat pilihan layanan REG, ONS, dan ECO.</p>
-                    <a class="button button-secondary" href="{{ route('tracking', ['tab' => 'harga']) }}">Cek Harga</a>
-                </article>
-                <article class="panel">
+                    <strong>Estimasi ongkir</strong>
+                    <span>Masukkan asal, tujuan, berat, dan dimensi untuk melihat pilihan layanan REG, ONS, dan ECO.</span>
+                </a>
+                <a class="service-link" href="{{ route('tracking', ['tab' => 'lokasi']) }}">
                     <span class="badge badge-brand">Lokasi</span>
-                    <h3 style="margin-top: 16px;">Hub dan gerai</h3>
-                    <p class="helper">Cari lokasi drop paket, pengambilan paket, jam operasional, dan nomor telepon gerai.</p>
-                    <a class="button button-secondary" href="{{ route('tracking', ['tab' => 'lokasi']) }}">Cari Lokasi</a>
-                </article>
+                    <strong>Hub dan gerai</strong>
+                    <span>Cari lokasi drop paket, pengambilan paket, jam operasional, dan nomor telepon gerai.</span>
+                </a>
             </div>
         </div>
     </section>
