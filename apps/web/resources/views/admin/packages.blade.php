@@ -11,7 +11,7 @@
                 <div>
                     <p class="eyebrow">Admin Paket</p>
                     <h1 style="font-size: 44px;">Create dan update status resi</h1>
-                    <p>Form masih mock frontend. Backend nanti menyimpan package dan package event.</p>
+                    <p>Kelola resi, status, tujuan, lokasi terakhir, dan catatan operasional.</p>
                 </div>
             </div>
 
@@ -20,14 +20,14 @@
                 <form class="form-grid">
                     <div class="field">
                         <label>Nomor resi</label>
-                        <input class="input" value="TKI-DEN-260607101500">
+                        <input class="input">
                     </div>
                     <div class="field">
                         <label>Status</label>
                         <select class="select">
                             <option>Terdaftar</option>
                             <option>Diangkut Driver</option>
-                            <option selected>Dalam Perjalanan</option>
+                            <option>Dalam Perjalanan</option>
                             <option>Sampai Tujuan</option>
                             <option>Gagal Dikirim</option>
                             <option>Cancel</option>
@@ -35,18 +35,18 @@
                     </div>
                     <div class="field">
                         <label>Tujuan</label>
-                        <input class="input" value="Gianyar">
+                        <input class="input">
                     </div>
                     <div class="field">
                         <label>Lokasi terakhir</label>
-                        <input class="input" value="Keluar Hub Denpasar">
+                        <input class="input">
                     </div>
                     <div class="field full">
                         <label>Catatan status</label>
-                        <textarea class="textarea">Paket dibawa driver untuk rute Gianyar.</textarea>
+                        <textarea class="textarea"></textarea>
                     </div>
                     <div class="full">
-                        <button class="button button-primary" type="button">Simpan Mock</button>
+                        <button class="button button-primary" type="button">Simpan</button>
                     </div>
                 </form>
             </article>
@@ -65,7 +65,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($packages as $package)
+                        @forelse($packages as $package)
                             <tr>
                                 <td><strong>{{ $package['receipt'] }}</strong></td>
                                 <td><span class="badge {{ $package['status'] === 'Sampai Tujuan' ? 'badge-success' : 'badge-brand' }}">{{ $package['status'] }}</span></td>
@@ -73,7 +73,11 @@
                                 <td>{{ $package['latest_location'] }}</td>
                                 <td>{{ $package['driver'] }}</td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="5">Belum ada data paket.</td>
+                            </tr>
+                        @endforelse
                         </tbody>
                     </table>
                 </div>

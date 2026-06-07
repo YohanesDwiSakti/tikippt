@@ -8,7 +8,7 @@
             <div>
                 <p class="eyebrow">Tugas Driver</p>
                 <h1 style="font-size: 44px;">Paket yang harus diangkut</h1>
-                <p>Paket di bawah ini adalah mock untuk Made Driver. Nanti data diambil dari assignment backend.</p>
+                <p>Paket yang muncul di sini berasal dari assignment operasional.</p>
             </div>
         </div>
 
@@ -18,7 +18,7 @@
                     <div>
                         <span class="badge {{ $package['status'] === 'Sampai Tujuan' ? 'badge-success' : 'badge-brand' }}">{{ $package['assignment_status'] }}</span>
                         <h2 style="margin-top: 16px;">{{ $package['receipt'] }}</h2>
-                        <p class="helper">{{ $package['destination'] }} · {{ $package['latest_location'] }}</p>
+                        <p class="helper">{{ $package['destination'] }} - {{ $package['latest_location'] }}</p>
                         <p>{{ $package['admin_note'] }}</p>
                     </div>
                     <a class="button button-primary" href="{{ route('driver.proof', ['receipt' => $package['receipt']]) }}">Kirim Bukti</a>

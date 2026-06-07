@@ -17,10 +17,10 @@
                 <span class="badge badge-brand">{{ __('messages.support.customer_care') }}</span>
                 <h2 style="margin-top: 16px;">{{ __('messages.support.main_contact') }}</h2>
                 <div class="contact-list">
-                    <a href="tel:+62361000101"><span>{{ __('messages.support.phone') }}</span><strong>0361 000 101</strong></a>
-                    <a href="https://wa.me/6281234567801"><span>WhatsApp</span><strong>0812 3456 7801</strong></a>
-                    <a href="mailto:support@finproppt.test"><span>Email</span><strong>support@finproppt.test</strong></a>
-                    <a href="https://instagram.com/tikidenpasar"><span>Instagram</span><strong>@tikidenpasar</strong></a>
+                    <div class="empty-row">
+                        <strong>{{ __('messages.support.contact_unavailable_title') }}</strong>
+                        <p class="helper">{{ __('messages.support.contact_unavailable_copy') }}</p>
+                    </div>
                 </div>
             </article>
 
@@ -29,19 +29,19 @@
                 <div class="meta-grid">
                     <div class="meta-item">
                         <div class="meta-label">{{ __('messages.support.weekday') }}</div>
-                        <div class="meta-value">08.00-17.00 WITA</div>
+                        <div class="meta-value">{{ __('messages.support.not_available') }}</div>
                     </div>
                     <div class="meta-item">
                         <div class="meta-label">{{ __('messages.support.saturday') }}</div>
-                        <div class="meta-value">08.00-14.00 WITA</div>
+                        <div class="meta-value">{{ __('messages.support.not_available') }}</div>
                     </div>
                     <div class="meta-item">
                         <div class="meta-label">{{ __('messages.support.sunday') }}</div>
-                        <div class="meta-value">{{ __('messages.support.limited_monitoring') }}</div>
+                        <div class="meta-value">{{ __('messages.support.not_available') }}</div>
                     </div>
                     <div class="meta-item">
                         <div class="meta-label">{{ __('messages.support.area') }}</div>
-                        <div class="meta-value">Denpasar, Sanur, Gianyar, Ubud</div>
+                        <div class="meta-value">{{ __('messages.support.not_available') }}</div>
                     </div>
                 </div>
             </article>

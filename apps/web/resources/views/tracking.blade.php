@@ -29,7 +29,7 @@
 
                 <form class="tracking-form" action="{{ route('tracking') }}" method="get" style="margin-bottom: 24px;">
                     <input type="hidden" name="tab" value="resi">
-                    <input class="input" name="receipt" value="{{ $receipt }}" placeholder="TKI-DEN-260607101500" aria-label="{{ __('messages.home.receipt_label') }}">
+                    <input class="input" name="receipt" value="{{ $receipt }}" aria-label="{{ __('messages.home.receipt_label') }}">
                     <button class="button button-primary" type="submit">{{ __('messages.tracking.tab_receipt') }}</button>
                 </form>
 
@@ -58,37 +58,37 @@
                     <input type="hidden" name="tab" value="harga">
                     <div class="field">
                         <label>{{ __('messages.tracking.from') }}</label>
-                        <input class="input" name="origin" value="{{ $origin }}" placeholder="Denpasar">
+                        <input class="input" name="origin" value="{{ $origin }}">
                     </div>
                     <div class="field">
                         <label>{{ __('messages.tracking.destination') }}</label>
-                        <input class="input" name="destination" value="{{ $destination }}" placeholder="Gianyar">
+                        <input class="input" name="destination" value="{{ $destination }}">
                     </div>
                     <div class="field">
                         <label>{{ __('messages.tracking.weight') }}</label>
                         <div class="input-addon">
-                            <input class="input" name="weight" type="number" min="1" step="0.1" value="{{ $weight }}" placeholder="1">
+                            <input class="input" name="weight" type="number" min="1" step="0.1" value="{{ $weight }}">
                             <span>Kg</span>
                         </div>
                     </div>
                     <div class="field">
                         <label>{{ __('messages.tracking.length') }}</label>
                         <div class="input-addon">
-                            <input class="input" name="length" type="number" min="0" value="{{ $length }}" placeholder="{{ __('messages.tracking.length') }}">
+                            <input class="input" name="length" type="number" min="0" value="{{ $length }}">
                             <span>Cm</span>
                         </div>
                     </div>
                     <div class="field">
                         <label>{{ __('messages.tracking.width') }}</label>
                         <div class="input-addon">
-                            <input class="input" name="width" type="number" min="0" value="{{ $width }}" placeholder="{{ __('messages.tracking.width') }}">
+                            <input class="input" name="width" type="number" min="0" value="{{ $width }}">
                             <span>Cm</span>
                         </div>
                     </div>
                     <div class="field">
                         <label>{{ __('messages.tracking.height') }}</label>
                         <div class="input-addon">
-                            <input class="input" name="height" type="number" min="0" value="{{ $height }}" placeholder="{{ __('messages.tracking.height') }}">
+                            <input class="input" name="height" type="number" min="0" value="{{ $height }}">
                             <span>Cm</span>
                         </div>
                     </div>
@@ -98,16 +98,23 @@
                 </form>
 
                 <div class="section-tight">
-                    <p class="helper">{{ __('messages.tracking.billable_weight', ['weight' => $chargeableWeight]) }} @if($volumeWeight > 0) {{ __('messages.tracking.volume_weight', ['weight' => $volumeWeight]) }} @endif.</p>
+                    @if(count($rates) > 0)
+                        <p class="helper">{{ __('messages.tracking.billable_weight', ['weight' => $chargeableWeight]) }} @if($volumeWeight > 0) {{ __('messages.tracking.volume_weight', ['weight' => $volumeWeight]) }} @endif.</p>
+                    @endif
                     <div class="rate-grid">
-                        @foreach($rates as $rate)
+                        @forelse($rates as $rate)
                             <article class="panel">
                                 <span class="badge badge-brand">{{ $rate['service'] }}</span>
                                 <h3 style="margin-top: 16px;">{{ $rate['label'] }}</h3>
                                 <p class="helper">{{ __('messages.tracking.route_eta', ['origin' => $origin, 'destination' => $destination, 'eta' => $rate['eta']]) }}</p>
                                 <div class="price">Rp{{ number_format($rate['price'], 0, ',', '.') }}</div>
                             </article>
-                        @endforeach
+                        @empty
+                            <article class="panel panel-muted">
+                                <strong>{{ __('messages.tracking.empty_rates_title') }}</strong>
+                                <p class="helper">{{ __('messages.tracking.empty_rates_copy') }}</p>
+                            </article>
+                        @endforelse
                     </div>
                 </div>
             </section>
@@ -125,7 +132,7 @@
 
                 <form class="tracking-form" action="{{ route('tracking') }}" method="get" style="margin-bottom: 24px;">
                     <input type="hidden" name="tab" value="lokasi">
-                    <input class="input" name="q" value="{{ $query }}" placeholder="{{ __('messages.tracking.location_placeholder') }}" aria-label="{{ __('messages.tracking.search_location') }}">
+                    <input class="input" name="q" value="{{ $query }}" aria-label="{{ __('messages.tracking.search_location') }}">
                     <button class="button button-primary" type="submit">{{ __('messages.tracking.search_location') }}</button>
                 </form>
 

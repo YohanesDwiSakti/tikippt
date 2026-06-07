@@ -107,8 +107,14 @@
     </article>
 @else
     <article class="status-panel">
-        <span class="badge badge-warning">{{ __('messages.status_panel.missing_badge') }}</span>
-        <h2 style="margin-top: 16px;">{{ __('messages.status_panel.missing_title') }}</h2>
-        <p class="helper">{{ __('messages.status_panel.missing_copy') }}</p>
+        @if(empty($receipt ?? ''))
+            <span class="badge badge-brand">{{ __('messages.home.card_receipt_label') }}</span>
+            <h2 style="margin-top: 16px;">{{ __('messages.tracking.empty_receipt_title') }}</h2>
+            <p class="helper">{{ __('messages.tracking.empty_receipt_copy') }}</p>
+        @else
+            <span class="badge badge-warning">{{ __('messages.status_panel.missing_badge') }}</span>
+            <h2 style="margin-top: 16px;">{{ __('messages.status_panel.missing_title') }}</h2>
+            <p class="helper">{{ __('messages.status_panel.missing_copy') }}</p>
+        @endif
     </article>
 @endif

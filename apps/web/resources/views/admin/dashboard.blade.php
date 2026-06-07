@@ -11,7 +11,7 @@
                 <div>
                     <p class="eyebrow">Admin Hub</p>
                     <h1 style="font-size: 44px;">Overview paket</h1>
-                    <p>Ringkasan frontend mock untuk status paket, assignment driver, dan bukti delivery.</p>
+                    <p>Ringkasan status paket, assignment driver, dan bukti delivery dari data operasional.</p>
                 </div>
                 <a class="button button-primary" href="{{ route('admin.packages') }}">Update Status</a>
             </div>
@@ -20,7 +20,7 @@
                 <article class="panel">
                     <div class="meta-label">Total paket</div>
                     <h2>{{ count($packages) }}</h2>
-                    <p class="helper">Data mock hari ini.</p>
+                    <p class="helper">Data paket aktif.</p>
                 </article>
                 <article class="panel">
                     <div class="meta-label">Driver aktif</div>
@@ -54,7 +54,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($packages as $package)
+                        @forelse($packages as $package)
                             <tr>
                                 <td><strong>{{ $package['receipt'] }}</strong></td>
                                 <td><span class="badge {{ $package['status'] === 'Sampai Tujuan' ? 'badge-success' : 'badge-brand' }}">{{ $package['status'] }}</span></td>
@@ -62,7 +62,11 @@
                                 <td>{{ $package['driver'] }}</td>
                                 <td>{{ $package['updated_at'] }}</td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="5">Belum ada data paket.</td>
+                            </tr>
+                        @endforelse
                         </tbody>
                     </table>
                 </div>

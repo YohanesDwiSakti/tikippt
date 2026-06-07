@@ -12,7 +12,7 @@
                 <input type="hidden" name="tab" value="resi">
                 <label class="field" style="flex: 1;">
                     <span class="meta-label">{{ __('messages.home.receipt_label') }}</span>
-                    <input class="input" name="receipt" value="{{ $receipt }}" placeholder="TKI-DEN-260607101500">
+                    <input class="input" name="receipt" value="{{ $receipt }}">
                 </label>
                 <button class="button button-primary" type="submit">{{ __('messages.home.check_receipt') }}</button>
             </form>

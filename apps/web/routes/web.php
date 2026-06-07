@@ -22,96 +22,14 @@ Route::get('/language/{locale}', function (string $locale) {
     return redirect()->back();
 })->name('language.switch');
 
-$packages = [
-    [
-        'receipt' => 'TKI-DEN-260607101500',
-        'status' => 'Dalam Perjalanan',
-        'destination' => 'Gianyar',
-        'latest_location' => 'Keluar Hub Denpasar',
-        'driver' => 'Made Driver',
-        'updated_at' => '07 Juni 2026, 10:15 WITA',
-        'assignment_status' => 'Dalam Perjalanan',
-        'admin_note' => 'Rute Gianyar pagi, prioritas diterima hari ini.',
-        'timeline' => [
-            ['status' => 'Terdaftar', 'location' => 'Hub Denpasar', 'time' => '09:30 WITA'],
-            ['status' => 'Diangkut Driver', 'location' => 'Hub Denpasar', 'time' => '10:00 WITA'],
-            ['status' => 'Dalam Perjalanan', 'location' => 'Keluar Hub Denpasar', 'time' => '10:15 WITA'],
-        ],
-        'proof' => null,
-    ],
-    [
-        'receipt' => 'TKI-DEN-260607132000',
-        'status' => 'Sampai Tujuan',
-        'destination' => 'Sanur',
-        'latest_location' => 'Alamat penerima, Sanur',
-        'driver' => 'Kadek Driver',
-        'updated_at' => '07 Juni 2026, 13:20 WITA',
-        'assignment_status' => 'Selesai',
-        'admin_note' => 'Pastikan foto bukti terlihat jelas.',
-        'timeline' => [
-            ['status' => 'Terdaftar', 'location' => 'Hub Denpasar', 'time' => '08:40 WITA'],
-            ['status' => 'Diangkut Driver', 'location' => 'Hub Denpasar', 'time' => '09:10 WITA'],
-            ['status' => 'Sampai Tujuan', 'location' => 'Alamat penerima, Sanur', 'time' => '13:20 WITA'],
-        ],
-        'proof' => [
-            'photo' => '/images/proof-placeholder.svg',
-            'time' => '07 Juni 2026, 13:20 WITA',
-            'location' => 'Alamat penerima, Sanur',
-            'note' => 'Diterima langsung oleh penerima.',
-        ],
-    ],
-    [
-        'receipt' => 'TKI-DEN-260607150500',
-        'status' => 'Diangkut Driver',
-        'destination' => 'Ubud',
-        'latest_location' => 'Hub Denpasar',
-        'driver' => 'Made Driver',
-        'updated_at' => '07 Juni 2026, 15:05 WITA',
-        'assignment_status' => 'Ditugaskan',
-        'admin_note' => 'Bawa bersama paket Gianyar jika rute memungkinkan.',
-        'timeline' => [
-            ['status' => 'Terdaftar', 'location' => 'Hub Denpasar', 'time' => '14:30 WITA'],
-            ['status' => 'Diangkut Driver', 'location' => 'Hub Denpasar', 'time' => '15:05 WITA'],
-        ],
-        'proof' => null,
-    ],
-];
+$packages = [];
 
-$drivers = [
-    ['id' => 'drv-1', 'name' => 'Made Driver', 'active' => 2],
-    ['id' => 'drv-2', 'name' => 'Kadek Driver', 'active' => 1],
-    ['id' => 'drv-3', 'name' => 'Wayan Driver', 'active' => 0],
-];
+$drivers = [];
 
-$locations = [
-    [
-        'name' => 'Hub TIKI Denpasar',
-        'type' => 'Hub utama',
-        'address' => 'Jl. Teuku Umar Barat, Denpasar',
-        'hours' => '08.00-17.00 WITA',
-        'phone' => '0361 000 101',
-        'services' => ['Drop paket', 'Ambil paket', 'Komplain resi'],
-    ],
-    [
-        'name' => 'Gerai Sanur',
-        'type' => 'Gerai',
-        'address' => 'Jl. Danau Tamblingan, Sanur',
-        'hours' => '09.00-16.00 WITA',
-        'phone' => '0361 000 202',
-        'services' => ['Drop paket', 'Cek ongkir'],
-    ],
-    [
-        'name' => 'Gerai Ubud',
-        'type' => 'Gerai',
-        'address' => 'Jl. Raya Ubud, Gianyar',
-        'hours' => '09.00-16.00 WITA',
-        'phone' => '0361 000 303',
-        'services' => ['Drop paket', 'Ambil paket'],
-    ],
-];
+$locations = [];
 
 Route::get('/', function () use ($packages) {
-    $receipt = request('receipt', 'TKI-DEN-260607101500');
+    $receipt = request('receipt', '');
     $selected = collect($packages)->firstWhere('receipt', strtoupper($receipt));
 
     return view('home', [
@@ -129,21 +47,14 @@ Route::get('/tracking', function () use ($packages, $locations) {
         $activeTab = 'resi';
     }
 
-    $origin = request('origin', 'Denpasar');
-    $destination = request('destination', 'Gianyar');
-    $weight = max((float) request('weight', 1), 0);
+    $origin = request('origin', '');
+    $destination = request('destination', '');
+    $weight = max((float) request('weight', 0), 0);
     $length = max((float) request('length', 0), 0);
     $width = max((float) request('width', 0), 0);
     $height = max((float) request('height', 0), 0);
     $volumeWeight = $length > 0 && $width > 0 && $height > 0 ? ceil(($length * $width * $height) / 6000) : 0;
-    $chargeableWeight = max(1, ceil(max($weight, $volumeWeight)));
-    $zoneRate = match (strtolower($destination)) {
-        'sanur' => 9000,
-        'gianyar' => 12000,
-        'ubud' => 14000,
-        'tabanan' => 15000,
-        default => 16000,
-    };
+    $chargeableWeight = ceil(max($weight, $volumeWeight));
 
     $locationQuery = strtolower(trim(request('q', '')));
     $filteredLocations = $locationQuery === ''
@@ -161,17 +72,13 @@ Route::get('/tracking', function () use ($packages, $locations) {
         'activeTab' => $activeTab,
         'origin' => $origin,
         'destination' => $destination,
-        'weight' => request('weight', '1'),
+        'weight' => request('weight', ''),
         'length' => request('length', ''),
         'width' => request('width', ''),
         'height' => request('height', ''),
         'chargeableWeight' => $chargeableWeight,
         'volumeWeight' => $volumeWeight,
-        'rates' => [
-            ['service' => 'REG', 'label' => 'Regular', 'eta' => '2-3 hari', 'price' => $zoneRate * $chargeableWeight],
-            ['service' => 'ONS', 'label' => 'Over Night Service', 'eta' => '1 hari', 'price' => ($zoneRate + 8000) * $chargeableWeight],
-            ['service' => 'ECO', 'label' => 'Ekonomi', 'eta' => '3-5 hari', 'price' => max(8000, $zoneRate - 3000) * $chargeableWeight],
-        ],
+        'rates' => [],
         'query' => request('q', ''),
         'locations' => $filteredLocations,
     ]);
@@ -207,7 +114,7 @@ Route::post('/login', function (Request $request) {
     session([
         'auth_role' => $data['role'],
         'auth_email' => $data['email'],
-        'auth_name' => $data['role'] === 'admin' ? 'Admin Hub' : 'Made Driver',
+        'auth_name' => $data['email'],
     ]);
 
     $redirect = trim($data['redirect'] ?? '', '/');
@@ -272,7 +179,7 @@ Route::get('/driver', function () use ($packages) {
     }
 
     return view('driver.index', [
-        'packages' => array_filter($packages, fn (array $package): bool => $package['driver'] === 'Made Driver'),
+        'packages' => $packages,
     ]);
 })->name('driver.index');
 

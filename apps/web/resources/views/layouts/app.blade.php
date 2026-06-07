@@ -86,10 +86,8 @@
                 <span class="footer-title">{{ __('messages.footer.contact') }}</span>
                 <a href="{{ route('support') }}">{{ __('messages.nav.support') }}</a>
                 <a href="{{ route('about') }}">{{ __('messages.nav.about') }}</a>
-                <a href="https://instagram.com/tikidenpasar">@tikidenpasar</a>
-                <a href="https://wa.me/6281234567801">WhatsApp Hub</a>
                 <span>Hub Denpasar</span>
-                <span>{{ __('messages.footer.hours') }}</span>
+                <span>{{ __('messages.support.contact_unavailable_title') }}</span>
             </div>
         </div>
     </footer>

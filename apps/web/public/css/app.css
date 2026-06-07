@@ -652,6 +652,11 @@ h3 {
     text-align: right;
 }
 
+.empty-row {
+    border-top: 1px solid hsl(var(--border));
+    padding-top: 16px;
+}
+
 .app-layout {
     display: grid;
     grid-template-columns: 248px minmax(0, 1fr);

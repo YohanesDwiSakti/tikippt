@@ -31,11 +31,11 @@
             <input type="hidden" name="redirect" value="{{ request('redirect') }}">
             <div class="field full">
                 <label>Email</label>
-                <input class="input" name="email" type="email" value="{{ old('email', 'admin@tiki.test') }}" required>
+                <input class="input" name="email" type="email" value="{{ old('email') }}" required>
             </div>
             <div class="field full">
                 <label>Password</label>
-                <input class="input" name="password" type="password" value="admin123" required>
+                <input class="input" name="password" type="password" required>
             </div>
             <div class="field full">
                 <label>{{ __('messages.login.role') }}</label>
@@ -43,7 +43,6 @@
                     <option value="admin" @selected(old('role', 'admin') === 'admin')>Admin</option>
                     <option value="driver" @selected(old('role') === 'driver')>Driver</option>
                 </select>
-                <p class="helper">{{ __('messages.login.helper') }}</p>
             </div>
             <div class="full" style="display: flex; gap: 12px; flex-wrap: wrap;">
                 <button class="button button-primary" type="submit">{{ __('messages.login.submit') }}</button>

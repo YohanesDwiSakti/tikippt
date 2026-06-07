@@ -8,7 +8,7 @@
             <div>
                 <p class="eyebrow">Bukti sampai tujuan</p>
                 <h1 style="font-size: 44px;">{{ $package['receipt'] }}</h1>
-                <p>Upload bukti saat paket sudah benar sampai tujuan. Form ini masih mock frontend.</p>
+                <p>Upload bukti saat paket sudah benar sampai tujuan.</p>
             </div>
             <a class="button button-secondary" href="{{ route('driver.index') }}">Kembali</a>
         </div>
@@ -37,26 +37,26 @@
                 </div>
                 <div class="field">
                     <label>Waktu sampai</label>
-                    <input class="input" type="datetime-local" value="2026-06-07T13:20">
+                    <input class="input" type="datetime-local">
                 </div>
                 <div class="field">
                     <label>Lokasi sampai</label>
-                    <input class="input" value="{{ $package['destination'] }}">
+                    <input class="input">
                 </div>
                 <div class="field">
                     <label>Latitude</label>
-                    <input class="input" value="-8.544">
+                    <input class="input">
                 </div>
                 <div class="field">
                     <label>Longitude</label>
-                    <input class="input" value="115.325">
+                    <input class="input">
                 </div>
                 <div class="field full">
                     <label>Catatan</label>
-                    <textarea class="textarea">Paket diterima di alamat tujuan.</textarea>
+                    <textarea class="textarea"></textarea>
                 </div>
                 <div class="full">
-                    <button class="button button-primary" type="button">Kirim Bukti Mock</button>
+                    <button class="button button-primary" type="button">Kirim Bukti</button>
                 </div>
             </form>
         </article>
