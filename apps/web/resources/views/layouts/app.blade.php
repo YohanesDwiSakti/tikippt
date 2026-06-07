@@ -44,10 +44,7 @@
                     <a class="nav-link" href="{{ route('login') }}" @if(request()->routeIs('login')) aria-current="page" @endif>{{ __('messages.nav.login') }}</a>
                 @endif
                 @if(session('auth_role'))
-                    <form method="POST" action="/logout">
-                        @csrf
-                        <button class="nav-link nav-button" type="submit">{{ __('messages.nav.logout') }}</button>
-                    </form>
+                    <a class="nav-link" href="/logout">{{ __('messages.nav.logout') }}</a>
                 @endif
             </div>
         </nav>
