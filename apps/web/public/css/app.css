@@ -1,6 +1,6 @@
 :root {
-    --brand: 356 79% 46%;
-    --brand-strong: 221 74% 32%;
+    --brand: 221 74% 32%;
+    --brand-strong: 222 47% 18%;
     --background: 0 0% 100%;
     --foreground: 222 34% 8%;
     --muted: 220 18% 96%;
@@ -10,7 +10,7 @@
     --success: 152 57% 33%;
     --warning: 35 91% 40%;
     --danger: 356 79% 46%;
-    --ring: 356 79% 46%;
+    --ring: 221 74% 32%;
     --radius: 8px;
 }
 
