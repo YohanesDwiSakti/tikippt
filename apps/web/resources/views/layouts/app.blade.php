@@ -16,13 +16,15 @@
                     <small>TIKI Denpasar</small>
                 </span>
             </a>
-            <div class="nav-links">
+            <div class="nav-primary" aria-label="Navigasi publik">
                 <a class="nav-link" href="{{ route('home') }}" @if(request()->routeIs('home')) aria-current="page" @endif>Beranda</a>
                 <a class="nav-link" href="{{ route('tracking') }}" @if(request()->routeIs('tracking')) aria-current="page" @endif>Cek Resi</a>
+            </div>
+            <div class="nav-account" aria-label="Akses akun">
                 @if(session('auth_role') === 'admin')
-                    <a class="nav-link" href="{{ route('admin.dashboard') }}" @if(request()->is('admin*')) aria-current="page" @endif>Admin</a>
+                    <a class="nav-link" href="{{ route('admin.dashboard') }}" @if(request()->is('admin*')) aria-current="page" @endif>Dashboard</a>
                 @elseif(session('auth_role') === 'driver')
-                    <a class="nav-link" href="{{ route('driver.index') }}" @if(request()->is('driver*')) aria-current="page" @endif>Driver</a>
+                    <a class="nav-link" href="{{ route('driver.index') }}" @if(request()->is('driver*')) aria-current="page" @endif>Dashboard</a>
                 @else
                     <a class="nav-link" href="{{ route('login') }}" @if(request()->routeIs('login')) aria-current="page" @endif>Login</a>
                 @endif
@@ -42,8 +44,33 @@
 
     <footer class="site-footer">
         <div class="page-shell footer-grid">
-            <strong>FINPROPPT TIKI Denpasar</strong>
-            <span>Tracking, assignment driver, dan bukti sampai tujuan.</span>
+            <div class="footer-brand">
+                <strong>FINPROPPT TIKI Denpasar</strong>
+                <span>Tracking resi, pembagian paket driver, dan bukti sampai tujuan.</span>
+            </div>
+            <div class="footer-column">
+                <span class="footer-title">Layanan</span>
+                <a href="{{ route('tracking') }}">Cek resi</a>
+                <a href="{{ route('home') }}">Alur pengiriman</a>
+            </div>
+            <div class="footer-column">
+                <span class="footer-title">Akses</span>
+                @if(session('auth_role') === 'admin')
+                    <a href="{{ route('admin.dashboard') }}">Dashboard</a>
+                    <a href="{{ route('admin.assignments') }}">Assign driver</a>
+                @elseif(session('auth_role') === 'driver')
+                    <a href="{{ route('driver.index') }}">Dashboard</a>
+                    <a href="{{ route('driver.index') }}">Paket driver</a>
+                @else
+                    <a href="{{ route('login') }}">Login internal</a>
+                    <a href="{{ route('tracking') }}">Tracking publik</a>
+                @endif
+            </div>
+            <div class="footer-column">
+                <span class="footer-title">Kontak</span>
+                <span>Hub Denpasar</span>
+                <span>Operasional 08.00-17.00 WITA</span>
+            </div>
         </div>
     </footer>
 </body>
