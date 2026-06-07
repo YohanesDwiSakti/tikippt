@@ -13,9 +13,13 @@ coverage/
 
 # Laravel runtime/cache output.
 bootstrap/cache/*.php
+**/bootstrap/cache/*.php
 storage/framework/sessions/*
 !storage/framework/sessions/.gitkeep
 storage/framework/views/*.php
+**/storage/framework/sessions/*
+!**/storage/framework/sessions/.gitkeep
+**/storage/framework/views/*.php
 
 # Secrets - commit .env.example, never .env.
 .env
