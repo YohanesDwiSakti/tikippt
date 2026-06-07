@@ -116,6 +116,10 @@ Route::get('/', function () use ($packages) {
 Route::get('/tracking', function () use ($packages, $locations) {
     $receipt = request('receipt');
     $selected = $receipt ? collect($packages)->firstWhere('receipt', strtoupper($receipt)) : null;
+    $activeTab = request('tab', 'resi');
+    if (! in_array($activeTab, ['resi', 'harga', 'lokasi'], true)) {
+        $activeTab = 'resi';
+    }
 
     $origin = request('origin', 'Denpasar');
     $destination = request('destination', 'Gianyar');
@@ -146,6 +150,7 @@ Route::get('/tracking', function () use ($packages, $locations) {
         'receipt' => $receipt,
         'selected' => $selected,
         'packages' => $packages,
+        'activeTab' => $activeTab,
         'origin' => $origin,
         'destination' => $destination,
         'weight' => request('weight', '1'),
@@ -165,15 +170,15 @@ Route::get('/tracking', function () use ($packages, $locations) {
 })->name('tracking');
 
 Route::get('/cek-ongkir', function () {
-    return redirect(route('tracking', request()->query()) . '#harga');
+    return redirect(route('tracking', array_merge(request()->query(), ['tab' => 'harga'])));
 })->name('shipping');
 
 Route::get('/lokasi', function () {
-    return redirect(route('tracking', request()->query()) . '#lokasi');
+    return redirect(route('tracking', array_merge(request()->query(), ['tab' => 'lokasi'])));
 })->name('locations');
 
 Route::get('/cek-lokasi', function () {
-    return redirect(route('tracking', request()->query()) . '#lokasi');
+    return redirect(route('tracking', array_merge(request()->query(), ['tab' => 'lokasi'])));
 });
 
 Route::get('/support', fn () => view('support'))->name('support');

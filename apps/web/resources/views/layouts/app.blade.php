@@ -52,9 +52,9 @@
             </div>
             <div class="footer-column">
                 <span class="footer-title">Layanan</span>
-                <a href="{{ route('tracking') }}#resi">Cek resi</a>
-                <a href="{{ route('tracking') }}#harga">Cek harga</a>
-                <a href="{{ route('tracking') }}#lokasi">Lokasi gerai</a>
+                <a href="{{ route('tracking', ['tab' => 'resi']) }}">Cek resi</a>
+                <a href="{{ route('tracking', ['tab' => 'harga']) }}">Cek harga</a>
+                <a href="{{ route('tracking', ['tab' => 'lokasi']) }}">Lokasi gerai</a>
             </div>
             <div class="footer-column">
                 <span class="footer-title">Akses</span>
