@@ -27,7 +27,7 @@ packages/
   config/    -> shared formatting/linting/tooling where applicable
 supabase/
   migrations/ -> committed database migrations
-  seed.sql    -> repeatable local/demo seed data
+  seed.sql    -> empty unless approved real reference data is needed
 ```
 
 `apps/mobile` does not exist yet and should be created only when mobile implementation starts. `apps/web` and `apps/server` may need to be migrated from the current template starter to Laravel and Go.
@@ -47,11 +47,11 @@ Customer tracking page
   -> Supabase packages + package_events + safe delivery_proofs summary
 
 Admin Laravel pages
-  -> Go API package and assignment endpoints
+  -> trusted Laravel Supabase gateway or Go API package and assignment endpoints
   -> Supabase packages + driver_assignments + package_events
 
 Driver Laravel/Expo pages
-  -> Go API driver endpoints
+  -> trusted Laravel Supabase gateway or Go API driver endpoints
   -> Supabase driver_assignments + delivery_proofs + package_events + Storage
 ```
 

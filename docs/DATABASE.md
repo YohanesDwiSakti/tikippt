@@ -1,12 +1,12 @@
 # Database
 
-> Open this for Supabase/Postgres work: schema design, migrations, RLS policies, indexes, seed data, storage buckets, query performance, and data lifecycle decisions.
+> Open this for Supabase/Postgres work: schema design, migrations, RLS policies, indexes, seed/reference data, storage buckets, query performance, and data lifecycle decisions.
 
 ## Role
 
 Supabase PostgreSQL is the source of truth for FINPROPPT tracking, package status, driver assignment, and delivery proof data. Supabase Storage owns uploaded delivery proof photos. Supabase Auth is the preferred production identity provider, with app roles stored in `profiles`, unless a later ADR chooses a different auth model.
 
-All real schema changes must live in `supabase/migrations/`, with repeatable demo data in `supabase/seed.sql`.
+All real schema changes must live in `supabase/migrations/`. `supabase/seed.sql` stays empty unless the team approves real reference data.
 
 The template still includes Supabase helper scripts. Use `pnpm db:diff -- -f add_finproppt_core_tables` or another descriptive migration name to generate reviewed migrations, `pnpm db:push` only when applying committed migrations to the linked remote, and keep `packages/types/src/database.types.ts` refreshed while TypeScript database types remain part of the workspace checks.
 
@@ -151,10 +151,10 @@ Purpose: Driver proof that package arrived at the destination.
 
 | Name | Where defined | Purpose | Notes |
 | --- | --- | --- | --- |
-| Demo admin Auth user | Supabase dashboard/Auth API | Admin login/testing | Create Auth user first, then insert matching `profiles` row with role `admin`. |
-| Demo driver Auth user | Supabase dashboard/Auth API | Driver flow testing | Create Auth user first, then insert matching `profiles` row with role `driver`. |
-| Sample packages | `supabase/seed.sql` | Tracking smoke tests | Keep deterministic and small. |
-| Sample package events | `supabase/seed.sql` | Tracking timeline smoke tests | Does not require Auth users. |
+| Admin Auth user | Supabase dashboard/Auth API | Admin login | Create Auth user first, then insert matching `profiles` row with role `admin`. |
+| Driver Auth user | Supabase dashboard/Auth API | Driver login and assignment | Create Auth user first, then insert matching `profiles` row with role `driver`. |
+| Operational packages | Admin package form/API | Customer tracking and driver assignment | Created by admin users only. |
+| Package events | Admin/driver status actions | Tracking timeline | Written when real status changes happen. |
 
 ## Schema Principles
 
@@ -172,7 +172,7 @@ Purpose: Driver proof that package arrived at the destination.
 - [ ] Tables, columns, constraints, and indexes are included.
 - [ ] RLS is enabled where needed.
 - [ ] Policies are included.
-- [ ] Seed/reference data is intentional and repeatable.
+- [ ] Seed/reference data is intentional, approved, and not placeholder operational data.
 - [ ] Generated database types or schema artifacts are refreshed when the workflow exists.
 - [ ] This Data Model Catalog is updated.
 - [ ] Roll-forward strategy is clear if production data exists.

@@ -29,34 +29,38 @@
         </div>
 
         <article class="panel">
-            <form class="form-grid">
+            @if($errors->any())
+                <div class="notice notice-danger">{{ $errors->first() }}</div>
+            @endif
+            <form class="form-grid" method="POST" action="{{ route('driver.proof.store', ['receipt' => $package['receipt']]) }}" enctype="multipart/form-data">
+                @csrf
                 <div class="field full">
                     <label>Foto bukti</label>
-                    <input class="input" type="file" accept="image/*">
-                    <p class="helper">Wajib saat backend upload sudah aktif.</p>
+                    <input class="input" name="photo" type="file" accept="image/*" required>
+                    <p class="helper">Foto disimpan sebagai bukti pengantaran.</p>
                 </div>
                 <div class="field">
                     <label>Waktu sampai</label>
-                    <input class="input" type="datetime-local">
+                    <input class="input" name="delivered_at" type="datetime-local" value="{{ old('delivered_at') }}" required>
                 </div>
                 <div class="field">
                     <label>Lokasi sampai</label>
-                    <input class="input">
+                    <input class="input" name="delivered_location" value="{{ old('delivered_location') }}" required>
                 </div>
                 <div class="field">
                     <label>Latitude</label>
-                    <input class="input">
+                    <input class="input" name="latitude" value="{{ old('latitude') }}">
                 </div>
                 <div class="field">
                     <label>Longitude</label>
-                    <input class="input">
+                    <input class="input" name="longitude" value="{{ old('longitude') }}">
                 </div>
                 <div class="field full">
                     <label>Catatan</label>
-                    <textarea class="textarea"></textarea>
+                    <textarea class="textarea" name="note">{{ old('note') }}</textarea>
                 </div>
                 <div class="full">
-                    <button class="button button-primary" type="button">Kirim Bukti</button>
+                    <button class="button button-primary" type="submit">Kirim Bukti</button>
                 </div>
             </form>
         </article>

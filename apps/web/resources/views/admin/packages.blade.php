@@ -17,36 +17,40 @@
 
             <article class="panel">
                 <h2>Update status</h2>
-                <form class="form-grid">
+                @if(session('status'))
+                    <div class="notice notice-success">{{ session('status') }}</div>
+                @endif
+                @if($errors->any())
+                    <div class="notice notice-danger">{{ $errors->first() }}</div>
+                @endif
+                <form class="form-grid" method="POST" action="{{ route('admin.packages.store') }}">
+                    @csrf
                     <div class="field">
                         <label>Nomor resi</label>
-                        <input class="input">
+                        <input class="input" name="receipt" value="{{ old('receipt') }}" required>
                     </div>
                     <div class="field">
                         <label>Status</label>
-                        <select class="select">
-                            <option>Terdaftar</option>
-                            <option>Diangkut Driver</option>
-                            <option>Dalam Perjalanan</option>
-                            <option>Sampai Tujuan</option>
-                            <option>Gagal Dikirim</option>
-                            <option>Cancel</option>
+                        <select class="select" name="status" required>
+                            @foreach(['Terdaftar', 'Diangkut Driver', 'Dalam Perjalanan', 'Sampai Tujuan', 'Gagal Dikirim', 'Cancel'] as $status)
+                                <option value="{{ $status }}" @selected(old('status') === $status)>{{ $status }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="field">
                         <label>Tujuan</label>
-                        <input class="input">
+                        <input class="input" name="destination" value="{{ old('destination') }}" required>
                     </div>
                     <div class="field">
                         <label>Lokasi terakhir</label>
-                        <input class="input">
+                        <input class="input" name="latest_location" value="{{ old('latest_location') }}" required>
                     </div>
                     <div class="field full">
                         <label>Catatan status</label>
-                        <textarea class="textarea"></textarea>
+                        <textarea class="textarea" name="note">{{ old('note') }}</textarea>
                     </div>
                     <div class="full">
-                        <button class="button button-primary" type="button">Simpan</button>
+                        <button class="button button-primary" type="submit">Simpan</button>
                     </div>
                 </form>
             </article>

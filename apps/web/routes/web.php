@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use App\Support\SupabaseGateway;
 
 function guardRole(string $role)
 {
@@ -22,26 +23,22 @@ Route::get('/language/{locale}', function (string $locale) {
     return redirect()->back();
 })->name('language.switch');
 
-$packages = [];
-
-$drivers = [];
-
 $locations = [];
 
-Route::get('/', function () use ($packages) {
+Route::get('/', function (SupabaseGateway $supabase) {
     $receipt = request('receipt', '');
-    $selected = collect($packages)->firstWhere('receipt', strtoupper($receipt));
+    $selected = $receipt !== '' ? $supabase->packageByReceipt($receipt) : null;
 
     return view('home', [
         'receipt' => $receipt,
         'selected' => $selected,
-        'packages' => $packages,
+        'packages' => [],
     ]);
 })->name('home');
 
-Route::get('/tracking', function () use ($packages, $locations) {
+Route::get('/tracking', function (SupabaseGateway $supabase) use ($locations) {
     $receipt = request('receipt');
-    $selected = $receipt ? collect($packages)->firstWhere('receipt', strtoupper($receipt)) : null;
+    $selected = $receipt ? $supabase->packageByReceipt($receipt) : null;
     $activeTab = request('tab', 'resi');
     if (! in_array($activeTab, ['resi', 'harga', 'lokasi'], true)) {
         $activeTab = 'resi';
@@ -68,7 +65,7 @@ Route::get('/tracking', function () use ($packages, $locations) {
     return view('tracking', [
         'receipt' => $receipt,
         'selected' => $selected,
-        'packages' => $packages,
+        'packages' => [],
         'activeTab' => $activeTab,
         'origin' => $origin,
         'destination' => $destination,
@@ -102,7 +99,7 @@ Route::get('/about', fn () => view('about'))->name('about');
 
 Route::get('/login', fn () => view('login'))->name('login');
 
-Route::post('/login', function (Request $request) {
+Route::post('/login', function (Request $request, SupabaseGateway $supabase) {
     $data = $request->validate([
         'email' => ['required', 'email'],
         'password' => ['required', 'string'],
@@ -110,11 +107,19 @@ Route::post('/login', function (Request $request) {
         'redirect' => ['nullable', 'string'],
     ]);
 
+    try {
+        $login = $supabase->login($data['email'], $data['password'], $data['role']);
+    } catch (\Throwable) {
+        return back()->withErrors(['email' => __('messages.login.error')])->withInput($request->except('password'));
+    }
+
     session()->regenerate();
     session([
-        'auth_role' => $data['role'],
-        'auth_email' => $data['email'],
-        'auth_name' => $data['email'],
+        'auth_id' => $login['profile']['id'],
+        'auth_role' => $login['profile']['role'],
+        'auth_email' => $login['profile']['email'],
+        'auth_name' => $login['profile']['name'],
+        'auth_token' => $login['access_token'],
     ]);
 
     $redirect = trim($data['redirect'] ?? '', '/');
@@ -126,71 +131,137 @@ Route::post('/login', function (Request $request) {
 })->name('login.submit');
 
 Route::post('/logout', function () {
-    session()->forget(['auth_role', 'auth_email', 'auth_name']);
+    session()->forget(['auth_id', 'auth_role', 'auth_email', 'auth_name', 'auth_token']);
     session()->invalidate();
     session()->regenerateToken();
 
     return redirect()->route('login')->with('auth_notice', 'Anda sudah logout.');
 })->name('logout');
 
-Route::get('/admin', function () use ($packages, $drivers) {
+Route::get('/admin', function (SupabaseGateway $supabase) {
     if ($redirect = guardRole('admin')) {
         return $redirect;
     }
 
     return view('admin.dashboard', [
-        'packages' => $packages,
-        'drivers' => $drivers,
+        'packages' => $supabase->packages(),
+        'drivers' => $supabase->drivers(),
     ]);
 })->name('admin.dashboard');
 
-Route::get('/admin/packages', function () use ($packages) {
+Route::get('/admin/packages', function (SupabaseGateway $supabase) {
     if ($redirect = guardRole('admin')) {
         return $redirect;
     }
 
-    return view('admin.packages', ['packages' => $packages]);
+    return view('admin.packages', ['packages' => $supabase->packages()]);
 })->name('admin.packages');
 
-Route::get('/admin/assignments', function () use ($packages, $drivers) {
+Route::post('/admin/packages', function (Request $request, SupabaseGateway $supabase) {
+    if ($redirect = guardRole('admin')) {
+        return $redirect;
+    }
+
+    $data = $request->validate([
+        'receipt' => ['required', 'string', 'max:80'],
+        'status' => ['required', 'in:Terdaftar,Diangkut Driver,Dalam Perjalanan,Sampai Tujuan,Gagal Dikirim,Cancel'],
+        'destination' => ['required', 'string', 'max:160'],
+        'latest_location' => ['required', 'string', 'max:160'],
+        'note' => ['nullable', 'string', 'max:500'],
+    ]);
+
+    try {
+        $supabase->savePackage($data, session('auth_id'));
+    } catch (\Throwable $error) {
+        return back()->withErrors(['receipt' => $error->getMessage()])->withInput();
+    }
+
+    return redirect()->route('admin.packages')->with('status', 'Paket berhasil disimpan.');
+})->name('admin.packages.store');
+
+Route::get('/admin/assignments', function (SupabaseGateway $supabase) {
     if ($redirect = guardRole('admin')) {
         return $redirect;
     }
 
     return view('admin.assignments', [
-        'packages' => $packages,
-        'drivers' => $drivers,
+        'packages' => $supabase->packages(),
+        'drivers' => $supabase->drivers(),
     ]);
 })->name('admin.assignments');
 
-Route::get('/admin/proofs', function () use ($packages) {
+Route::post('/admin/assignments', function (Request $request, SupabaseGateway $supabase) {
+    if ($redirect = guardRole('admin')) {
+        return $redirect;
+    }
+
+    $data = $request->validate([
+        'driver_id' => ['required', 'string'],
+        'receipts' => ['required', 'array', 'min:1'],
+        'receipts.*' => ['required', 'string'],
+        'note' => ['nullable', 'string', 'max:500'],
+    ]);
+
+    try {
+        $supabase->assignPackages($data['receipts'], $data['driver_id'], session('auth_id'), $data['note'] ?? null);
+    } catch (\Throwable $error) {
+        return back()->withErrors(['driver_id' => $error->getMessage()])->withInput();
+    }
+
+    return redirect()->route('admin.assignments')->with('status', 'Paket berhasil diassign ke driver.');
+})->name('admin.assignments.store');
+
+Route::get('/admin/proofs', function (SupabaseGateway $supabase) {
     if ($redirect = guardRole('admin')) {
         return $redirect;
     }
 
     return view('admin.proofs', [
-        'packages' => array_filter($packages, fn (array $package): bool => $package['proof'] !== null),
+        'packages' => array_filter($supabase->packages(), fn (array $package): bool => $package['proof'] !== null),
     ]);
 })->name('admin.proofs');
 
-Route::get('/driver', function () use ($packages) {
+Route::get('/driver', function (SupabaseGateway $supabase) {
     if ($redirect = guardRole('driver')) {
         return $redirect;
     }
 
     return view('driver.index', [
-        'packages' => $packages,
+        'packages' => $supabase->driverPackages(session('auth_id')),
     ]);
 })->name('driver.index');
 
-Route::get('/driver/proof/{receipt}', function (string $receipt) use ($packages) {
+Route::get('/driver/proof/{receipt}', function (string $receipt, SupabaseGateway $supabase) {
     if ($redirect = guardRole('driver')) {
         return $redirect;
     }
 
-    $package = collect($packages)->firstWhere('receipt', strtoupper($receipt));
+    $package = collect($supabase->driverPackages(session('auth_id')))->firstWhere('receipt', strtoupper($receipt));
 
     abort_if(! $package, 404);
 
     return view('driver.proof', ['package' => $package]);
 })->name('driver.proof');
+
+Route::post('/driver/proof/{receipt}', function (string $receipt, Request $request, SupabaseGateway $supabase) {
+    if ($redirect = guardRole('driver')) {
+        return $redirect;
+    }
+
+    $data = $request->validate([
+        'photo' => ['required', 'image', 'max:4096'],
+        'delivered_at' => ['required', 'date'],
+        'delivered_location' => ['required', 'string', 'max:160'],
+        'latitude' => ['nullable', 'numeric'],
+        'longitude' => ['nullable', 'numeric'],
+        'note' => ['nullable', 'string', 'max:500'],
+    ]);
+
+    try {
+        $supabase->submitProof($receipt, session('auth_id'), $data + ['photo_url' => ''], $request->file('photo'));
+    } catch (\Throwable $error) {
+        return back()->withErrors(['photo' => $error->getMessage()])->withInput();
+    }
+
+    return redirect()->route('driver.index')->with('status', 'Bukti berhasil dikirim.');
+})->name('driver.proof.store');

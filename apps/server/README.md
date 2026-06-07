@@ -25,8 +25,8 @@ Backend API for customer receipt tracking, admin package/status management, driv
    ```sql
    insert into public.profiles (id, name, email, role)
    values
-     ('<admin-auth-user-id>', 'Admin Hub', 'admin@tiki.test', 'admin'),
-     ('<driver-auth-user-id>', 'Made Driver', 'driver@tiki.test', 'driver');
+     ('<admin-auth-user-id>', '<admin-name>', '<admin-email>', 'admin'),
+     ('<driver-auth-user-id>', '<driver-name>', '<driver-email>', 'driver');
    ```
 
 5. Run seed data in `supabase/seed.sql`.

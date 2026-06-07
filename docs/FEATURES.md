@@ -14,8 +14,8 @@ Role-aware access for admin hub and driver users. Customer tracking can stay pub
 
 - Sign in admin and driver users with validated credentials. `P0`
 - Redirect admin and driver users to the correct dashboard. `P0`
-- Seed demo admin and driver accounts for testing. `P0`
-- Hash passwords or use Supabase Auth before production. `P0`
+- Create real admin and driver accounts through Supabase Auth and `profiles`. `P0`
+- Use Supabase Auth for passwords and sessions. `P0`
 - Enforce endpoint authorization by role. `P0`
 - Add password reset and profile management. `P2`
 

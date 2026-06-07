@@ -12,6 +12,10 @@
             </div>
         </div>
 
+        @if(session('status'))
+            <div class="notice notice-success">{{ session('status') }}</div>
+        @endif
+
         <div class="task-list" style="margin-top: 24px;">
             @forelse($packages as $package)
                 <article class="task-card">

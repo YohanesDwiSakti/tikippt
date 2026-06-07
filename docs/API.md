@@ -71,19 +71,19 @@ Response `200`:
 ```json
 {
   "data": {
-    "receipt": "TKI-DEN-260607101500",
+    "receipt": "<receipt>",
     "status": "Dalam Perjalanan",
-    "destination": "Gianyar",
-    "latest_location": "Hub Denpasar",
-    "driver_name": "Made Driver",
-    "updated_at": "2026-06-07T10:15:00+08:00",
+    "destination": "<destination>",
+    "latest_location": "<latest-location>",
+    "driver_name": "<driver-name>",
+    "updated_at": "<updated-at>",
     "delivery_proof": null,
     "timeline": [
       {
         "status": "Terdaftar",
-        "location": "Hub Denpasar",
-        "note": "Paket terdaftar",
-        "created_at": "2026-06-07T09:30:00+08:00"
+        "location": "<event-location>",
+        "note": "<event-note>",
+        "created_at": "<event-created-at>"
       }
     ]
   }
@@ -95,16 +95,16 @@ Delivered response includes proof summary:
 ```json
 {
   "data": {
-    "receipt": "TKI-DEN-260607101500",
+    "receipt": "<receipt>",
     "status": "Sampai Tujuan",
-    "destination": "Gianyar",
-    "latest_location": "Alamat penerima, Gianyar",
-    "driver_name": "Made Driver",
-    "updated_at": "2026-06-07T13:20:00+08:00",
+    "destination": "<destination>",
+    "latest_location": "<delivered-location>",
+    "driver_name": "<driver-name>",
+    "updated_at": "<updated-at>",
     "delivery_proof": {
-      "photo_url": "https://...",
-      "delivered_at": "2026-06-07T13:20:00+08:00",
-      "delivered_location": "Alamat penerima, Gianyar"
+      "photo_url": "<proof-photo-url>",
+      "delivered_at": "<delivered-at>",
+      "delivered_location": "<delivered-location>"
     },
     "timeline": []
   }
@@ -126,7 +126,7 @@ Admin or driver login.
 Body:
 
 ```json
-{ "email": "admin@tiki.test", "password": "admin123", "role": "admin" }
+{ "email": "<admin-email>", "password": "<password>", "role": "admin" }
 ```
 
 Response `200`:
@@ -134,7 +134,7 @@ Response `200`:
 ```json
 {
   "data": {
-    "user": { "id": "uuid", "name": "Admin Hub", "email": "admin@tiki.test", "role": "admin" },
+    "user": { "id": "uuid", "name": "Admin Hub", "email": "<admin-email>", "role": "admin" },
     "token": "session-or-api-token"
   }
 }
@@ -162,11 +162,11 @@ Body:
 
 ```json
 {
-  "receipt": "TKI-DEN-260607101500",
-  "destination": "Gianyar",
+  "receipt": "<receipt>",
+  "destination": "<destination>",
   "status": "Terdaftar",
-  "latest_location": "Hub Denpasar",
-  "note": "Paket masuk hub"
+  "latest_location": "<latest-location>",
+  "note": "<status-note>"
 }
 ```
 
@@ -185,8 +185,8 @@ Body:
 ```json
 {
   "status": "Dalam Perjalanan",
-  "latest_location": "Keluar Hub Denpasar",
-  "note": "Paket dibawa driver"
+  "latest_location": "<latest-location>",
+  "note": "<status-note>"
 }
 ```
 
@@ -210,8 +210,8 @@ Body:
 ```json
 {
   "driver_id": "uuid",
-  "receipts": ["TKI-DEN-260607101500", "TKI-DEN-260607101501"],
-  "note": "Paket rute Gianyar"
+  "receipts": ["<receipt-1>", "<receipt-2>"],
+  "note": "<assignment-note>"
 }
 ```
 
@@ -248,13 +248,13 @@ Response `200`:
 {
   "data": [
     {
-      "receipt": "TKI-DEN-260607101500",
-      "destination": "Gianyar",
+      "receipt": "<receipt>",
+      "destination": "<destination>",
       "status": "Diangkut Driver",
-      "latest_location": "Hub Denpasar",
+      "latest_location": "<latest-location>",
       "assignment_status": "Ditugaskan",
-      "assigned_at": "2026-06-07T10:00:00+08:00",
-      "admin_note": "Paket rute Gianyar"
+      "assigned_at": "<assigned-at>",
+      "admin_note": "<assignment-note>"
     }
   ]
 }
@@ -270,12 +270,12 @@ Body:
 
 ```json
 {
-  "photo_url": "https://...",
-  "delivered_at": "2026-06-07T13:20:00+08:00",
-  "delivered_location": "Alamat penerima, Gianyar",
-  "latitude": -8.544,
-  "longitude": 115.325,
-  "note": "Diterima oleh penerima"
+  "photo_url": "<proof-photo-url>",
+  "delivered_at": "<delivered-at>",
+  "delivered_location": "<delivered-location>",
+  "latitude": "<latitude>",
+  "longitude": "<longitude>",
+  "note": "<proof-note>"
 }
 ```
 
