@@ -328,14 +328,6 @@ h3 {
     padding: 20px;
 }
 
-.privacy-panel {
-    margin-top: 20px;
-    border: 1px dashed hsl(var(--border));
-    border-radius: var(--radius);
-    background: hsl(var(--muted));
-    padding: 16px;
-}
-
 .notice {
     margin-bottom: 16px;
     border: 1px solid hsl(var(--border));
@@ -436,6 +428,43 @@ h3 {
     margin-top: 7px;
     border-radius: 999px;
     background: hsl(var(--brand));
+}
+
+.masked-receipt {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.redacted-inline,
+.redacted-line {
+    display: block;
+    border-radius: 999px;
+    background: linear-gradient(90deg, hsl(var(--border)), hsl(var(--muted)), hsl(var(--border)));
+}
+
+.redacted-inline {
+    width: 64px;
+    height: 18px;
+}
+
+.redacted-line {
+    width: 100%;
+    height: 14px;
+    margin-top: 6px;
+}
+
+.redacted-short {
+    max-width: 96px;
+}
+
+.redacted-medium {
+    max-width: 140px;
+}
+
+.redacted-long {
+    max-width: 190px;
 }
 
 .section {
