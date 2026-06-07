@@ -75,6 +75,33 @@ $drivers = [
     ['id' => 'drv-3', 'name' => 'Wayan Driver', 'active' => 0],
 ];
 
+$locations = [
+    [
+        'name' => 'Hub TIKI Denpasar',
+        'type' => 'Hub utama',
+        'address' => 'Jl. Teuku Umar Barat, Denpasar',
+        'hours' => '08.00-17.00 WITA',
+        'phone' => '0361 000 101',
+        'services' => ['Drop paket', 'Ambil paket', 'Komplain resi'],
+    ],
+    [
+        'name' => 'Gerai Sanur',
+        'type' => 'Gerai',
+        'address' => 'Jl. Danau Tamblingan, Sanur',
+        'hours' => '09.00-16.00 WITA',
+        'phone' => '0361 000 202',
+        'services' => ['Drop paket', 'Cek ongkir'],
+    ],
+    [
+        'name' => 'Gerai Ubud',
+        'type' => 'Gerai',
+        'address' => 'Jl. Raya Ubud, Gianyar',
+        'hours' => '09.00-16.00 WITA',
+        'phone' => '0361 000 303',
+        'services' => ['Drop paket', 'Ambil paket'],
+    ],
+];
+
 Route::get('/', function () use ($packages) {
     $receipt = request('receipt', 'TKI-DEN-260607101500');
     $selected = collect($packages)->firstWhere('receipt', strtoupper($receipt));
@@ -96,6 +123,62 @@ Route::get('/tracking', function () use ($packages) {
         'packages' => $packages,
     ]);
 })->name('tracking');
+
+Route::get('/cek-ongkir', function () {
+    $origin = request('origin', 'Denpasar');
+    $destination = request('destination', 'Gianyar');
+    $weight = max((float) request('weight', 1), 0);
+    $length = max((float) request('length', 0), 0);
+    $width = max((float) request('width', 0), 0);
+    $height = max((float) request('height', 0), 0);
+    $volumeWeight = $length > 0 && $width > 0 && $height > 0 ? ceil(($length * $width * $height) / 6000) : 0;
+    $chargeableWeight = max(1, ceil(max($weight, $volumeWeight)));
+    $zoneRate = match (strtolower($destination)) {
+        'sanur' => 9000,
+        'gianyar' => 12000,
+        'ubud' => 14000,
+        'tabanan' => 15000,
+        default => 16000,
+    };
+
+    return view('shipping', [
+        'origin' => $origin,
+        'destination' => $destination,
+        'weight' => request('weight', '1'),
+        'length' => request('length', ''),
+        'width' => request('width', ''),
+        'height' => request('height', ''),
+        'chargeableWeight' => $chargeableWeight,
+        'volumeWeight' => $volumeWeight,
+        'rates' => [
+            ['service' => 'REG', 'label' => 'Regular', 'eta' => '2-3 hari', 'price' => $zoneRate * $chargeableWeight],
+            ['service' => 'ONS', 'label' => 'Over Night Service', 'eta' => '1 hari', 'price' => ($zoneRate + 8000) * $chargeableWeight],
+            ['service' => 'ECO', 'label' => 'Ekonomi', 'eta' => '3-5 hari', 'price' => max(8000, $zoneRate - 3000) * $chargeableWeight],
+        ],
+    ]);
+})->name('shipping');
+
+Route::get('/lokasi', function () use ($locations) {
+    $query = strtolower(trim(request('q', '')));
+    $filtered = $query === ''
+        ? $locations
+        : array_filter($locations, fn (array $location): bool =>
+            str_contains(strtolower($location['name']), $query)
+            || str_contains(strtolower($location['address']), $query)
+            || str_contains(strtolower($location['type']), $query)
+        );
+
+    return view('locations', [
+        'query' => request('q', ''),
+        'locations' => $filtered,
+    ]);
+})->name('locations');
+
+Route::redirect('/cek-lokasi', '/lokasi');
+
+Route::get('/support', fn () => view('support'))->name('support');
+
+Route::get('/about', fn () => view('about'))->name('about');
 
 Route::get('/login', fn () => view('login'))->name('login');
 

@@ -487,6 +487,35 @@ h3 {
     grid-column: 1 / -1;
 }
 
+.form-actions {
+    display: flex;
+    justify-content: center;
+}
+
+.input-addon {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.input-addon .input {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.input-addon span {
+    display: inline-flex;
+    min-width: 48px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid hsl(var(--border));
+    border-left: 0;
+    border-bottom-right-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+    background: hsl(var(--muted));
+    color: hsl(var(--muted-foreground));
+    font-weight: 600;
+}
+
 .field label {
     display: block;
     margin-bottom: 6px;
@@ -514,6 +543,76 @@ h3 {
     border-radius: var(--radius);
     background: white;
     padding: 20px;
+}
+
+.tool-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin: 24px 0 40px;
+}
+
+.tool-tabs a {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    background: white;
+    color: hsl(var(--muted-foreground));
+    font-weight: 700;
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, transform 150ms ease;
+}
+
+.tool-tabs a:hover,
+.tool-tabs a[aria-current="page"] {
+    border-color: hsl(var(--brand));
+    background: hsl(var(--brand));
+    color: white;
+}
+
+.tool-tabs a:active {
+    transform: scale(0.98);
+}
+
+.section-tight {
+    padding-top: 32px;
+}
+
+.rate-grid,
+.location-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.price {
+    margin-top: 20px;
+    color: hsl(var(--foreground));
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.location-card {
+    display: grid;
+    align-content: start;
+}
+
+.service-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.service-list span {
+    border-radius: 999px;
+    background: hsl(var(--muted));
+    color: hsl(var(--muted-foreground));
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 10px;
 }
 
 .proof-preview {
@@ -622,7 +721,13 @@ h3 {
     }
 
     .grid-3,
-    .form-grid {
+    .form-grid,
+    .rate-grid,
+    .location-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tool-tabs {
         grid-template-columns: 1fr;
     }
 
