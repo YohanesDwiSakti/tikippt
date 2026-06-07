@@ -47,7 +47,7 @@ Public customer receipt lookup. Phase: P0. Spec: `docs/UI_UX.md`, `docs/API.md`.
 - `[x]` Tracking result with status, destination, latest location, updated time, timeline, and safe proof summary when delivered. (API.md, UI_UX.md)
 - `[x]` Not-found, validation, loading, and error states represented in mock UI. (UI_UX.md, QUALITY.md)
 - `[x]` Public footer with TIKI Denpasar help/contact/legal links, no provider/debug details. (UI_UX.md, QUALITY.md)
-- `[x]` Public utility pages for check ongkir, location lookup, support, and about. (UI_UX.md)
+- `[x]` Public service page combines check resi, price/ongkir, and location lookup; about remains a separate page. (UI_UX.md)
 - `[ ]` Responsive render review at mobile and required desktop widths. (FRONTEND.md, QUALITY.md)
 
 **Connects to:** `GET /api/v1/tracking/{receipt}`, `packages`, `package_events`, safe `delivery_proofs` summary.
@@ -157,6 +157,6 @@ Mobile tracking and driver workflow. Phase: P1. Spec: `docs/FEATURES.md`, `docs/
 
 - 2026-06-07 - Product docs rescoped to customer receipt tracking, admin status/driver assignment, and driver delivery proof. Payment and unrelated prototype modules removed from active scope.
 - 2026-06-07 - Go backend API added with Supabase Auth login, role middleware, package tracking, admin package/status endpoints, driver assignment, driver package list, and delivery proof endpoints.
-- 2026-06-07 - Public web utilities added for cek ongkir, lokasi gerai, support, and about.
+- 2026-06-07 - Public web utilities consolidated into one layanan page for cek resi, harga/ongkir, and lokasi, with a separate about page.
 - 2026-06-07 - Laravel frontend mock added for public tracking, login, admin package/status, admin assignment, admin proof review, driver task list, and driver proof submission.
 - 2026-06-07 - Product docs initialized from old FINPROPPT/TIKI Denpasar decomposition with target stack Laravel web, Go API, Supabase, and Expo mobile.

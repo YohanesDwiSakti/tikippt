@@ -580,6 +580,29 @@ h3 {
     padding-top: 32px;
 }
 
+.service-section {
+    scroll-margin-top: 96px;
+}
+
+.service-section + .service-section {
+    margin-top: 48px;
+    border-top: 1px solid hsl(var(--border));
+    padding-top: 48px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.section-heading p {
+    margin-bottom: 0;
+    color: hsl(var(--muted-foreground));
+}
+
 .rate-grid,
 .location-grid {
     display: grid;

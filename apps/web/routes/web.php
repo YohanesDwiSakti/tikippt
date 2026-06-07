@@ -113,18 +113,10 @@ Route::get('/', function () use ($packages) {
     ]);
 })->name('home');
 
-Route::get('/tracking', function () use ($packages) {
+Route::get('/tracking', function () use ($packages, $locations) {
     $receipt = request('receipt');
     $selected = $receipt ? collect($packages)->firstWhere('receipt', strtoupper($receipt)) : null;
 
-    return view('tracking', [
-        'receipt' => $receipt,
-        'selected' => $selected,
-        'packages' => $packages,
-    ]);
-})->name('tracking');
-
-Route::get('/cek-ongkir', function () {
     $origin = request('origin', 'Denpasar');
     $destination = request('destination', 'Gianyar');
     $weight = max((float) request('weight', 1), 0);
@@ -141,7 +133,19 @@ Route::get('/cek-ongkir', function () {
         default => 16000,
     };
 
-    return view('shipping', [
+    $locationQuery = strtolower(trim(request('q', '')));
+    $filteredLocations = $locationQuery === ''
+        ? $locations
+        : array_filter($locations, fn (array $location): bool =>
+            str_contains(strtolower($location['name']), $locationQuery)
+            || str_contains(strtolower($location['address']), $locationQuery)
+            || str_contains(strtolower($location['type']), $locationQuery)
+        );
+
+    return view('tracking', [
+        'receipt' => $receipt,
+        'selected' => $selected,
+        'packages' => $packages,
         'origin' => $origin,
         'destination' => $destination,
         'weight' => request('weight', '1'),
@@ -155,26 +159,22 @@ Route::get('/cek-ongkir', function () {
             ['service' => 'ONS', 'label' => 'Over Night Service', 'eta' => '1 hari', 'price' => ($zoneRate + 8000) * $chargeableWeight],
             ['service' => 'ECO', 'label' => 'Ekonomi', 'eta' => '3-5 hari', 'price' => max(8000, $zoneRate - 3000) * $chargeableWeight],
         ],
+        'query' => request('q', ''),
+        'locations' => $filteredLocations,
     ]);
+})->name('tracking');
+
+Route::get('/cek-ongkir', function () {
+    return redirect(route('tracking', request()->query()) . '#harga');
 })->name('shipping');
 
-Route::get('/lokasi', function () use ($locations) {
-    $query = strtolower(trim(request('q', '')));
-    $filtered = $query === ''
-        ? $locations
-        : array_filter($locations, fn (array $location): bool =>
-            str_contains(strtolower($location['name']), $query)
-            || str_contains(strtolower($location['address']), $query)
-            || str_contains(strtolower($location['type']), $query)
-        );
-
-    return view('locations', [
-        'query' => request('q', ''),
-        'locations' => $filtered,
-    ]);
+Route::get('/lokasi', function () {
+    return redirect(route('tracking', request()->query()) . '#lokasi');
 })->name('locations');
 
-Route::redirect('/cek-lokasi', '/lokasi');
+Route::get('/cek-lokasi', function () {
+    return redirect(route('tracking', request()->query()) . '#lokasi');
+});
 
 Route::get('/support', fn () => view('support'))->name('support');
 

@@ -18,9 +18,8 @@
             </a>
             <div class="nav-primary" aria-label="Navigasi publik">
                 <a class="nav-link" href="{{ route('home') }}" @if(request()->routeIs('home')) aria-current="page" @endif>Beranda</a>
-                <a class="nav-link" href="{{ route('tracking') }}" @if(request()->routeIs('tracking')) aria-current="page" @endif>Cek Resi</a>
-                <a class="nav-link" href="{{ route('shipping') }}" @if(request()->routeIs('shipping')) aria-current="page" @endif>Cek Ongkir</a>
-                <a class="nav-link" href="{{ route('locations') }}" @if(request()->routeIs('locations')) aria-current="page" @endif>Lokasi</a>
+                <a class="nav-link" href="{{ route('tracking') }}" @if(request()->routeIs('tracking')) aria-current="page" @endif>Layanan</a>
+                <a class="nav-link" href="{{ route('about') }}" @if(request()->routeIs('about')) aria-current="page" @endif>About</a>
             </div>
             <div class="nav-account" aria-label="Akses akun">
                 <a class="nav-link" href="{{ route('support') }}" @if(request()->routeIs('support')) aria-current="page" @endif>Support</a>
@@ -53,9 +52,9 @@
             </div>
             <div class="footer-column">
                 <span class="footer-title">Layanan</span>
-                <a href="{{ route('tracking') }}">Cek resi</a>
-                <a href="{{ route('shipping') }}">Cek ongkir</a>
-                <a href="{{ route('locations') }}">Lokasi gerai</a>
+                <a href="{{ route('tracking') }}#resi">Cek resi</a>
+                <a href="{{ route('tracking') }}#harga">Cek harga</a>
+                <a href="{{ route('tracking') }}#lokasi">Lokasi gerai</a>
             </div>
             <div class="footer-column">
                 <span class="footer-title">Akses</span>
