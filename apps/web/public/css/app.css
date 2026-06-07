@@ -328,6 +328,14 @@ h3 {
     padding: 20px;
 }
 
+.privacy-panel {
+    margin-top: 20px;
+    border: 1px dashed hsl(var(--border));
+    border-radius: var(--radius);
+    background: hsl(var(--muted));
+    padding: 16px;
+}
+
 .notice {
     margin-bottom: 16px;
     border: 1px solid hsl(var(--border));

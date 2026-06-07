@@ -18,7 +18,7 @@
             </form>
         </div>
 
-        @include('partials.status-panel', ['selected' => $selected])
+        @include('partials.status-panel', ['selected' => $selected, 'masked' => true])
     </section>
 
     <section class="section section-muted">
