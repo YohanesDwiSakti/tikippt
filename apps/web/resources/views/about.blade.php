@@ -7,45 +7,58 @@
         <div class="page-heading">
             <div>
                 <p class="eyebrow">About</p>
-                <h1 style="font-size: 48px;">Platform operasional untuk pengiriman lokal TIKI Denpasar</h1>
-                <p class="lead">FINPROPPT dirancang sebagai dashboard internal dan halaman publik ringan untuk memperjelas pergerakan paket, tanggung jawab driver, dan bukti pengantaran.</p>
+                <h1 style="font-size: 48px;">Layanan pengiriman yang lebih mudah dipantau</h1>
+                <p class="lead">FINPROPPT membantu customer dan tim hub TIKI Denpasar melihat informasi paket dengan jelas: resi, estimasi harga, lokasi gerai, assignment driver, dan bukti sampai tujuan.</p>
             </div>
         </div>
 
         <div class="about-layout">
             <article class="panel">
-                <h2>Kenapa dibuat</h2>
-                <p class="helper">Operasional pengantaran sering membutuhkan catatan yang cepat dilihat: paket sedang di mana, siapa driver yang membawa, dan apakah sudah ada bukti sampai. Sistem ini menyimpan informasi tersebut dalam alur yang mudah dipahami customer dan tim hub.</p>
+                <h2>Tentang layanan ini</h2>
+                <p class="helper">Layanan ini dibuat untuk mengurangi kebingungan saat paket sedang berjalan. Customer dapat mengecek informasi dasar secara mandiri, sementara tim hub memiliki alur yang lebih rapi untuk membagi paket ke driver dan menyimpan bukti pengantaran.</p>
             </article>
             <article class="panel panel-muted">
-                <h2>Fokus versi ini</h2>
+                <h2>Yang bisa dilakukan</h2>
                 <ul class="check-list">
-                    <li>Cek resi publik tanpa login.</li>
-                    <li>Admin mengubah status dan membagi paket ke driver.</li>
-                    <li>Driver melihat tugas dan mengirim bukti foto, waktu, serta lokasi.</li>
-                    <li>Tidak ada fitur payment atau checkout.</li>
+                    <li>Melihat status paket berdasarkan nomor resi.</li>
+                    <li>Mengecek estimasi harga kirim sebelum mengirim paket.</li>
+                    <li>Menemukan hub atau gerai terdekat di area layanan.</li>
+                    <li>Melihat bukti pengantaran saat paket sudah diterima.</li>
                 </ul>
             </article>
         </div>
 
         <section class="section-tight">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Cakupan layanan</p>
+                    <h2>Informasi yang disiapkan untuk customer</h2>
+                </div>
+            </div>
             <div class="grid-3">
                 <article class="panel">
-                    <span class="badge badge-brand">Web</span>
-                    <h3 style="margin-top: 16px;">Laravel frontend</h3>
-                    <p class="helper">Tampilan publik, admin, dan driver dibangun sebagai interface web yang cepat dibuka di cabang atau hub.</p>
+                    <span class="badge badge-brand">Status</span>
+                    <h3 style="margin-top: 16px;">Pergerakan paket</h3>
+                    <p class="helper">Customer melihat posisi terakhir, riwayat status, tujuan, dan waktu pembaruan paket.</p>
                 </article>
                 <article class="panel">
-                    <span class="badge badge-brand">API</span>
-                    <h3 style="margin-top: 16px;">Go backend</h3>
-                    <p class="helper">Backend disiapkan untuk auth, status paket, assignment driver, dan bukti delivery.</p>
+                    <span class="badge badge-brand">Harga</span>
+                    <h3 style="margin-top: 16px;">Estimasi biaya</h3>
+                    <p class="helper">Perkiraan ongkir membantu customer memilih layanan sesuai kebutuhan dan berat paket.</p>
                 </article>
                 <article class="panel">
-                    <span class="badge badge-brand">Data</span>
-                    <h3 style="margin-top: 16px;">Supabase</h3>
-                    <p class="helper">Database dan auth memakai Supabase agar data resi, profil, assignment, dan bukti bisa dikelola terpusat.</p>
+                    <span class="badge badge-brand">Bukti</span>
+                    <h3 style="margin-top: 16px;">Konfirmasi sampai</h3>
+                    <p class="helper">Saat paket diterima, bukti berupa foto, waktu, lokasi, dan catatan driver dapat dicatat.</p>
                 </article>
             </div>
+        </section>
+
+        <section class="section-tight">
+            <article class="panel panel-muted">
+                <h2>Area operasional</h2>
+                <p class="helper">Fokus layanan saat ini adalah Denpasar dan area sekitar seperti Sanur, Gianyar, Ubud, dan Tabanan. Informasi lokasi dan jam operasional dapat dilihat pada tab Cek Lokasi di halaman Layanan.</p>
+            </article>
         </section>
     </section>
 @endsection
