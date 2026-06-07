@@ -1,5 +1,8 @@
 # Dependencies and build output - never commit these, in any repo.
 node_modules/
+vendor/
+.composer-cache/
+.pnpm-store/
 dist/
 .next/
 .turbo/
@@ -7,6 +10,12 @@ coverage/
 *.log
 *.tsbuildinfo
 .DS_Store
+
+# Laravel runtime/cache output.
+bootstrap/cache/*.php
+storage/framework/sessions/*
+!storage/framework/sessions/.gitkeep
+storage/framework/views/*.php
 
 # Secrets - commit .env.example, never .env.
 .env

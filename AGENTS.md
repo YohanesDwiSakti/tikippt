@@ -68,26 +68,26 @@ Rationale lives in `docs/DECISIONS.md`. Don't introduce an alternative to any of
 
 | Layer           | Choice                                                         |
 | --------------- | -------------------------------------------------------------- |
-| Monorepo        | pnpm · Turborepo · TypeScript                                  |
-| Frontend        | Next.js (App Router) · React · Tailwind CSS · shadcn/ui        |
-| Backend         | Node.js · Hono · Zod (validation)                              |
+| Monorepo        | Keep template workspace/tooling where useful; migrate app scripts per stack |
+| Frontend        | Laravel web app in `apps/web`                                  |
+| Backend         | Go API service in `apps/server`                                |
+| Mobile          | React Native Expo in `apps/mobile`                             |
 | Database        | Supabase - PostgreSQL                                          |
 | Auth            | Supabase Auth                                                  |
 | Storage         | Supabase Storage                                               |
-| Payments        | Midtrans - **only** when the project takes payments            |
+| Payments        | None - payment features are out of scope for this project      |
 | Deploy          | See `docs/DECISIONS.md` ADR-007                                |
 | Large AI models | Hugging Face - **only** when the project involves large models |
 
 Stack rules:
 
-- Shared request/response **contracts are Zod schemas in `packages/types`**; infer TS types from them so web + server can't drift.
+- Durable request/response contracts live in `docs/API.md`; generate OpenAPI/typed client artifacts when implementation tooling is added so Laravel, Go, and Expo can't drift.
 - Supabase: the anon key is public (`NEXT_PUBLIC_*`); the **service-role key is server-only** - never import it into `apps/web`.
 - Large AI models are **never bundled** into the app - call Hugging Face (Inference API / Endpoints) from `apps/server`.
 - Custom model handoff lives in root `huggingface/`. Put model weights/checkpoints under `huggingface/models/` or exported artifacts under `huggingface/artifacts/`; those files are ignored for normal GitHub pushes.
-- Payments: integrate **Midtrans** from `apps/server`. The **server key is server-only**; the browser uses the public `NEXT_PUBLIC_MIDTRANS_CLIENT_KEY` for Snap. The webhook is verified by **signature hash**, never Bearer auth. See ADR-012.
-- Marketplace payments are not assumed to be solved by normal Midtrans checkout. For multi-seller, split settlement, seller payout, or platform-as-merchant-of-record flows, read `docs/PAYMENTS.md` first.
+- Payments: do **not** add payment, invoice, checkout, Midtrans, refund, settlement, payout, payment env vars, payment routes, payment tables, or payment UI for this project. See `docs/PAYMENTS.md` and ADR-018.
 - Auth extras are **Supabase-native**: OAuth (Google, GitHub) and password reset run through the Supabase SDK with providers and redirect URLs configured in the dashboard; profile pictures go to a Supabase **Storage** bucket with RLS. See ADR-013.
-- Frontend is **pre-wired** (ADR-014): shadcn is configured (`components.json` -> `packages/ui`), Tailwind maps the `globals.css` tokens, and `cn()` plus a retuned reference `Button` exist. The starter page (`apps/web/src/app/page.tsx`) is the **design foundation** — build on it, do not replace it with a fresh generation. Change the palette (accent only, keep background white), content, and routes per product; keep the open-band layout, nav shell, font wiring, and footer structure unless `docs/UI_UX.md` explicitly calls for something different. Do **not** re-init shadcn or accept its default theme. The **`shadcn-ui` skill** drives the UI workflow and lint blocks the worst generic-AI class tells. See `docs/DESIGN_DNA.md` (short) and `docs/FRONTEND.md` (detailed).
+- The template's Next/shadcn starter exists only as starter context. For this product, migrate `apps/web` to Laravel while preserving stack-agnostic UI rules from `docs/DESIGN_DNA.md`, `docs/FRONTEND.md`, and product direction from `docs/UI_UX.md`.
 
 ## Workflow
 
@@ -144,10 +144,10 @@ These five rules are supreme. They override all other decisions. If anything con
 
 ## Architecture Discipline
 
-- **`apps/web`** = frontend only. **`apps/server`** = backend only. No crossing.
+- **`apps/web`** = Laravel web/frontend application. **`apps/server`** = Go backend API. **`apps/mobile`** = Expo mobile app. No runtime imports across apps.
 - **`packages/`** = shared, reusable, app-agnostic code:
   - `packages/ui` - design system / shared components
-  - `packages/types` - shared TypeScript types
+  - `packages/types` - shared/generated TypeScript contracts when useful for Expo/tooling
   - `packages/utils` - pure, framework-agnostic helpers
   - `packages/config` - shared configs (tsconfig, eslint, etc.)
 - **`huggingface/`** = optional Hugging Face handoff workspace for model cards, Space files, and upload-ready assets. It is not a web/server/package runtime.

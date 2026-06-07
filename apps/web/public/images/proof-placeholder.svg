@@ -1,0 +1,9 @@
+<svg width="360" height="260" viewBox="0 0 360 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="360" height="260" rx="8" fill="#F4F6F8"/>
+  <rect x="38" y="42" width="284" height="176" rx="8" fill="white" stroke="#DDE3EA" stroke-width="2"/>
+  <path d="M93 168L135 126L166 157L194 129L267 202H72L93 168Z" fill="#DDE3EA"/>
+  <circle cx="246" cy="82" r="22" fill="#DDE3EA"/>
+  <rect x="74" y="73" width="112" height="12" rx="6" fill="#C8D1DB"/>
+  <rect x="74" y="96" width="74" height="10" rx="5" fill="#DDE3EA"/>
+  <text x="180" y="236" text-anchor="middle" fill="#5D6673" font-family="Arial, sans-serif" font-size="14" font-weight="700">Bukti Foto Delivery</text>
+</svg>

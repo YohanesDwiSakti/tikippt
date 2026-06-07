@@ -145,3 +145,19 @@
 - Rejected: One giant architecture/spec doc (too much to read every turn); putting backend/database/payment rules only in AGENTS.md (too long for daily workflow); making every domain doc mandatory for every task (wastes context and encourages stale reading).
 - Status: Accepted
 - Date: 2026-05-31
+
+## ADR-017: FINPROPPT target stack - Laravel web, Go API, Supabase, Expo mobile
+
+- Decision: For FINPROPPT TIKI Denpasar, use Laravel for `apps/web`, Go for `apps/server`, Supabase PostgreSQL/Auth/Storage for data platform needs, and React Native Expo for `apps/mobile`. Keep stack-agnostic template rules such as documentation-first workflow, app boundaries, migration-based database changes, secret hygiene, and quality gates.
+- Reason: The user explicitly selected this stack based on the legacy project decomposition and required it for the new product plan. Laravel matches the existing customer/admin web prototype, Go matches the existing local/API prototype, Supabase is already the database target, and Expo matches the mobile prototype.
+- Rejected: Continuing the template default Next.js + Hono stack for this product, because it conflicts with the user's required stack and the old project decomposition.
+- Status: Accepted
+- Date: 2026-06-07
+
+## ADR-018: FINPROPPT excludes payments
+
+- Decision: FINPROPPT TIKI Denpasar will not include payment, invoice, checkout, Midtrans, refund, settlement, payout, payment environment variables, payment database tables, payment API routes, or payment UI in the current product scope.
+- Reason: The user explicitly narrowed the product to customer receipt tracking, admin package status and driver assignment, and driver delivery proof with photo, time, and location.
+- Rejected: Keeping basic payment records from the old prototype decomposition, because they would add unwanted scope and data structures.
+- Status: Accepted
+- Date: 2026-06-07

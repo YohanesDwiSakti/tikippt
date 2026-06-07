@@ -1,224 +1,134 @@
-# UI/UX Brief - <Project Name>
-
-<!--
-  Product-specific design source of truth.
-
-  FRONTEND.md defines the universal UI rules for this template.
-  UI_UX.md defines the identity and UX direction for THIS product.
-
-  Fill this after PRD.md and FEATURES.md, before generating PROGRESS.md.
-  Use the user's design brief, product scope, and selected REFERENCES.md examples.
-  When the product matches a known vertical, read the matching docs/verticals/*.md playbook
-  and capture the relevant choices here.
-  The starter UI (`apps/web/`) is the design foundation — build on it, not from scratch.
-  Keep its open-band composition, white surface, sticky nav, font wiring, and footer shell.
-  This brief records what changes per product: accent palette, content direction, layout
-  deviations (only when the product genuinely needs a different structure), and routes.
-  Read `docs/DESIGN_DNA.md` before filling this file.
-  Do not copy long rules from FRONTEND.md. Point to them when needed.
--->
+# UI/UX Brief - FINPROPPT TIKI Denpasar
 
 ## Summary
 
-<!--
-  One short paragraph. What should the product feel like, and why does that fit
-  the audience and problem?
--->
+FINPROPPT should feel like a focused logistics operations tool: customers get a fast receipt status page, admins get dense package and driver assignment controls, and drivers get a simple task list with proof submission. The interface should prioritize clarity, accountability, and speed over marketing decoration.
 
 ## Design Inputs
 
-<!--
-  Capture what the user asked for. If a section is unknown, ask instead of inventing.
--->
-
-- **User direction:**
-- **Vertical playbook:** <docs/verticals/ECOMMERCE.md / none / other>
-- **Closest vertical from REFERENCES.md:**
-- **Reference products/sites:**
-- **Starter design DNA to keep:** <clean/open/non-boxy/restraint/nav-footer polish/motion/media/none>
-- **Starter UI patterns not to copy:** <exact layout/section order/placeholder copy/starter brand/other>
-- **Things the user explicitly likes:**
-- **Things the user explicitly dislikes:**
+- **User direction:** Use Laravel for web, Go for backend, Supabase for database, and React Expo for mobile. No payment features. Focus on receipt tracking, admin status updates/driver assignment, and driver delivery proof with photo, time, and location.
+- **Vertical playbook:** Logistics/operations. No dedicated vertical file was read because the user provided concrete workflow direction.
+- **Closest vertical from REFERENCES.md:** Operational dashboard and delivery tracking patterns.
+- **Reference products/sites:** TIKI/JNE-style tracking flows, courier task apps, shipment admin dashboards.
+- **Starter design DNA to keep:** clean white surface, restrained open sections, sticky visible nav, clear footer/endcap, practical spacing.
+- **Starter UI patterns not to copy:** Next.js-specific starter composition, generic SaaS hero, decorative stat strips, placeholder brand/copy.
+- **Things the user explicitly likes:** The required Laravel + Go + Supabase + Expo stack and narrow operational workflow.
+- **Things the user explicitly dislikes:** Payment features and using a stack outside the one specified.
 
 ## Product Personality
 
-<!-- Pick 3-5 traits that guide tradeoffs. Avoid vague words unless explained. -->
-
-- <Trait> - <what this means in UI decisions>
-- <Trait> - <what this means in UI decisions>
+- **Direct:** the first action is always obvious: cek resi, update status, assign driver, or submit proof.
+- **Accountable:** delivered packages show proof photo, time, and location.
+- **Efficient:** admin and driver screens are optimized for scanning and repeated use.
+- **Calm:** status labels, spacing, and tables carry hierarchy without heavy dark panels or noisy decoration.
 
 ## Layout Principles
 
-<!--
-  Product-specific layout rules. FRONTEND.md gives guardrails; this section chooses the
-  product's actual layout direction. Keep it concrete enough to guide pages, but not so
-  detailed that it becomes CSS.
--->
-
-- **Primary layout model:** <top navbar / sidebar / hybrid / editorial / dashboard / other>
-- **Page composition:** <how landing, list, detail, form, and dashboard pages should feel>
-- **Surface budget:** <where cards/panels are allowed, and where open lists, sections,
-  tables, or typography should carry hierarchy instead>
-- **Open composition:** Define how the product should avoid a boxy or paper-prototype feel:
-  which areas stay open, which sections can use bands, and which content truly earns a
-  framed card/panel.
-- **Navigation placement:** Primary nav links navigate to real routes/pages, not same-page
-  section jumps. Define whether public/app nav uses a top navbar, sidebar, bottom nav, or
-  drawer at each breakpoint.
-- **Navigation surface:** Define the visible nav treatment: background band, sidebar rail,
-  border, blur, solid token surface, or another product-appropriate surface. Nav must not
-  be invisible floating text. Primary nav should normally be anchored (sticky) on scroll.
-- **First viewport:** The landing hero (headline, supporting copy, primary CTA, and for
-  commerce the search/shop entry) must fit the first screen without scrolling at ~720-768px
-  desktop height and on mobile. Note any product-specific above-the-fold priorities.
-- **Route connectivity:** Define how users move between public, auth, and app contexts.
-  App pages need a clear route back to the public landing/product home; public/auth pages
-  need clear routes into sign in, sign up, or the app.
-- **Footer model:** Every route has a footer or footer-equivalent endcap. Define what
-  public, app, and auth footers contain for this product.
-- **Desktop gutters:** Use wide page shells with small desktop gutters unless the route is
-  a focused reading or form page.
+- **Primary layout model:** top navigation for public tracking; sidebar or compact dashboard rail for admin; mobile bottom tabs for Expo tracking/driver tasks.
+- **Page composition:** public landing starts with receipt tracking; admin uses tables/forms for package status and assignments; driver uses task cards and a proof form.
+- **Surface budget:** cards are allowed for individual driver task cards, proof upload forms, and dashboard panels. Avoid wrapping every section in cards.
+- **Open composition:** public tracking page stays open on a white background. Admin can use panels where data grouping matters, but avoid nested card shells.
+- **Navigation placement:** route-based navigation, not same-page section jumps. Public links include home/tracking/login. Admin links include packages, assignments, proofs. Driver links include tasks and history.
+- **Navigation surface:** sticky top nav with white background and border for public web. Admin can use a persistent sidebar with clear active state. Mobile uses bottom tabs.
+- **First viewport:** public first screen should expose receipt input and status search without scrolling at desktop height.
+- **Route connectivity:** admin and driver dashboards include a route back to public tracking/home; public/auth pages link into login.
+- **Footer model:** public footer includes TIKI Denpasar help/contact/legal links; app/admin/driver routes use a compact endcap with support/legal/version-safe copy, not provider/debug details.
+- **Desktop gutters:** admin pages use wide layouts with controlled gutters; public tracking uses readable max-width content.
 
 ## Visual System
 
-<!--
-  This guides globals.css, shared components, and page composition.
-  Exact token values may live in globals.css; explain the design intent here.
--->
-
-- **App name for metadata:**
-- **Browser title pattern:** `<Page> | <AppName>`
-- **Icon/brand asset direction:** Use the template default icon/mark or a clean wordmark
-  unless the user provides product-specific branding. Do not invent placeholder initials,
-  random logo tiles, or generic marks that pretend to be a real brand.
-- **Color direction:** Commit to a deliberate product palette. Avoid the tired AI-starter
-  defaults (violet/indigo, emerald/forest + cream editorial, muted sage, dark-purple SaaS).
-- **Typography direction:** Name the actual typeface(s). A modern family wired via `next/font`
-  to `--font-sans`, never the browser default serif/system font.
-- **Density and spacing:**
-- **Non-boxy hierarchy:** How should spacing, type weight, alignment, section rhythm,
-  imagery, and inline metadata carry hierarchy before adding borders or cards?
-- **Rich text/scannability:** Where should emphasis, inline links, captions, metadata,
-  lists, helper text, or callouts be used to make content easier to scan?
-- **Audience-appropriate data:** Which metrics, counts, badges, and operational data are
-  useful for each route context? Public/customer pages should not show internal KPIs or
-  admin/seller operational data unless the user can act on it.
-- **Radius and borders:**
-- **Cards and surfaces:** Where should cards be used, and where should hierarchy come from
-  spacing, typography, open lists, tables, or section bands instead? Define how the product
-  avoids card soup and a paper-prototype feel while still feeling clear and balanced.
-- **Imagery/product visuals:**
-- **Icon style:** Define where icons help users scan controls and entry points. Prefer
-  familiar `lucide-react` icons for actions such as search, cart, category, filter, deal,
-  store/seller, checkout, account, delivery, and arrows; avoid decorative or mismatched
-  icons. Specify which controls are icon-only, icon + label, text + optional icon, or
-  text-only.
-- **Motion:**
+- **App name for metadata:** FINPROPPT TIKI Denpasar
+- **Browser title pattern:** Page name followed by `| FINPROPPT`, for example `Tracking | FINPROPPT`.
+- **Icon/brand asset direction:** use a clean wordmark or approved TIKI asset if provided. Do not invent a fake logo mark.
+- **Color direction:** white background, neutral gray surfaces, and a restrained TIKI-inspired accent in red/blue. Avoid cream, purple gradients, and generic dark SaaS panels.
+- **Typography direction:** use a modern sans in Laravel assets. Keep weights to 400, 500/600, and 700.
+- **Density and spacing:** customer tracking is medium density; admin and driver pages are denser and optimized for scanning.
+- **Non-boxy hierarchy:** use section headings, table structure, status chips, inline metadata, and spacing before adding borders.
+- **Rich text/scannability:** use short helper text for receipt input, status badges for package state, timestamps for tracking, and compact metadata for assignments.
+- **Audience-appropriate data:** customers see receipt, status, destination, latest location, timeline, and safe delivery proof summary when delivered. Admins see package, driver, assignment, and proof data. Drivers see only assigned package tasks and proof submission state.
+- **Radius and borders:** modest radius, subtle borders for data panels and inputs, no oversized rounded marketing cards.
+- **Cards and surfaces:** forms, task cards, and proof panels can be card-like. Hero, tracking overview, and footer should remain open.
+- **Imagery/product visuals:** use real logistics/shipping imagery only if supplied or sourced later. Proof photos are functional content, not decorative assets.
+- **Icon style:** use familiar icons for search/tracking, package, driver, camera/photo, clock/time, map-pin/location, check, and cancel actions.
+- **Motion:** minimal transform/opacity transitions; operational feedback should be immediate.
 
 ## Navigation Model
 
-<!--
-  List the intended top-level pages. Keep primary nav route-based.
--->
-
-- `/` - <landing purpose>
-- `/features` - <purpose>
-- `/pricing` - <purpose, if applicable>
-- `/blog` - <purpose, if applicable>
-- `/signin` - <purpose>
-- `<protected route>` - <purpose>
+- `/` - public tracking-focused landing.
+- `/tracking` - public receipt tracking.
+- `/login` - admin/driver sign in.
+- `/admin` - admin operations overview.
+- `/admin/packages` - create/update package receipt and status.
+- `/admin/assignments` - assign packages to drivers.
+- `/admin/proofs` - review delivery proof photo/time/location.
+- `/driver` - driver assigned package task list.
+- `/driver/proof/{receipt}` - submit delivery proof.
+- Expo mobile: `Lacak`, `Tugas Driver`, and `Bukti` flows.
 
 ## Page UX Map
 
-<!--
-  One row per important route or area. This is product-specific UX intent, not
-  implementation status. Implementation status lives in PROGRESS.md.
--->
-
-| Route / Area | User goal | Primary action | Layout notes                   | States needed                     |
-| ------------ | --------- | -------------- | ------------------------------ | --------------------------------- |
-| `/`          | <goal>    | <action>       | <product-specific composition> | <empty/loading/error if relevant> |
-| `<route>`    | <goal>    | <action>       | <notes>                        | <states>                          |
+| Route / Area | User goal | Primary action | Layout notes | States needed |
+| --- | --- | --- | --- | --- |
+| `/` | Check a package quickly | Enter receipt | Open tracking-first hero | Empty, validation, loading |
+| `/tracking` | See shipment status | Search receipt | Timeline with latest status and safe proof summary | Empty, not found, loading, result |
+| `/login` | Access admin/driver tools | Sign in | Focused form, role-aware redirect | Validation, loading, error |
+| `/admin` | See operational snapshot | Review packages needing action | Dense summary and recent package/assignment lists | Empty data as zero, loading skeleton |
+| `/admin/packages` | Create or update receipt status | Save package status | Table plus compact create/update form | Validation, success, conflict |
+| `/admin/assignments` | Give packages to a driver | Assign selected receipts | Driver selector plus package selection table | Empty, validation, assigned |
+| `/admin/proofs` | Verify delivered package proof | Review proof | Table/detail with photo, time, location | Empty, loading, missing proof |
+| `/driver` | Know which packages to carry | Open assigned package | Mobile-friendly task cards | Empty, loading, assigned |
+| `/driver/proof/{receipt}` | Confirm package arrived | Upload photo and location/time | Proof form optimized for mobile | Photo required, submitting, success |
+| Expo `Lacak` | Track on mobile | Search receipt | Single-purpose tab | Alert validation, loading, result |
+| Expo driver tasks | Work assigned packages | Submit proof | Task cards and proof capture | Empty, permission, upload, success |
 
 ## Components And Patterns
 
-<!--
-  Reusable UI patterns this product should feel consistent around.
-  Put shared implementation tasks in PROGRESS.md.
--->
-
-- **Buttons and CTAs:** Define which primary and secondary actions use icon + label,
-  text-only, or icon-only controls. Do not put icons on every button by default; use icons
-  where they clarify the action or make dense navigation/category/deal surfaces easier to
-  scan. For compact universal controls, icon-only is allowed with accessible labels; for
-  major CTAs, keep the text label primary.
-- **Navigation active states:** How active navbar/sidebar/bottom-nav links look, including
-  mobile.
-- **Route links:** How public, app, and auth shells link to each other so no context becomes
-  a dead end.
-- **Click affordance:** Define how text links, section actions, clickable cards, and rows
-  look interactive before hover. Plain body text should not be the only clue that something
-  is clickable.
-- **Footer/endcap:** Contextual footer content for public, app, and auth routes.
-- **Cards/lists/tables:** Include a surface budget so the UI does not become card-heavy.
-- **Product/list metadata:** For commerce or catalog products, define how names, prices,
-  discounts, ratings, sold counts, stock, delivery, seller/location, category badges, and
-  actions are visually distinguished.
-- **Metrics and stats:** Define which stats are shown to public users, signed-in users,
-  sellers, admins, or finance users. Avoid generic stat strips and internal planning data
-  on customer-facing pages.
-- **Forms:**
-- **Empty states:**
-- **Error states:**
-- **Loading states:**
+- **Buttons and CTAs:** primary CTAs use text labels; operational row actions may use icon + label; destructive/cancel actions are visibly distinct.
+- **Navigation active states:** active route uses accent text/background and `aria-current="page"` on web.
+- **Route links:** public, auth, admin, and driver contexts always provide a way back to home or role dashboard.
+- **Click affordance:** rows and cards that are clickable need visible action labels or chevrons.
+- **Footer/endcap:** public footer has help/contact/legal; app endcaps are compact and role-aware.
+- **Cards/lists/tables:** tables for admin data; cards for mobile/driver tasks; forms use panels only when it clarifies grouping.
+- **Metrics and stats:** customers do not see internal counters. Admins see operational package/assignment/proof counts only.
+- **Forms:** labels are always visible; required fields are clear; validation appears near fields.
+- **Empty states:** explain what data is missing and the next useful action.
+- **Error states:** plain language with retry or next step where possible.
+- **Loading states:** skeletons match table, card, or form result shape.
 
 ## Copy Tone
 
-<!--
-  Product-specific voice. Still obey FRONTEND.md: clear English, no filler,
-  no decorative emoji, no em dash in UI copy.
--->
-
-- **Voice:**
-- **Words to use:**
-- **Words to avoid:**
-- **Example headline style:**
-- **Example button style:**
+- **Voice:** direct, helpful, operational.
+- **Words to use:** resi, status, driver, paket, bukti, foto, waktu, lokasi, sampai tujuan.
+- **Words to avoid:** payment, invoice, checkout, Midtrans, vague marketing claims, provider/debug names, internal stack labels.
+- **Example headline style:** `Cek status resi TIKI Denpasar`
+- **Example button style:** `Cek Resi`, `Update Status`, `Assign Driver`, `Kirim Bukti`.
 
 ## Responsive Rules
 
-<!-- Product-specific breakpoint behavior that PROGRESS.md should turn into tasks. -->
-
-- Mobile:
-- Tablet:
-- Desktop:
+- **Mobile:** prioritize one task per screen, large tap targets, bottom-tab pattern for Expo, and compact driver task cards.
+- **Tablet:** admin tables may become stacked rows with key metadata visible.
+- **Desktop:** admin uses dense tables and summary rows; public pages keep receipt search visible above the fold.
 
 ## Accessibility Notes
 
-<!-- Anything specific beyond FRONTEND.md and QUALITY.md. -->
-
-- Keyboard:
-- Focus states:
-- Contrast:
-- Motion sensitivity:
+- **Keyboard:** all web forms, nav links, and table actions are keyboard reachable.
+- **Focus states:** visible accent focus ring on every interactive element.
+- **Contrast:** status chips and action buttons must pass contrast checks.
+- **Motion sensitivity:** avoid non-essential animation; respect reduced motion.
 
 ## Explicit UI Non-Goals
 
-<!--
-  Product-specific design directions to avoid. These should mirror user dislikes
-  and any relevant PRD non-goals.
--->
-
-- <thing not to design>
-- <thing not to design>
+- No payment, invoice, checkout, Midtrans, or paid/unpaid UI.
+- No generic SaaS landing page detached from tracking.
+- No heavy dark hero panel or purple/indigo gradient theme.
+- No customer-facing internal admin metrics.
+- No provider/stack/debug badges in the public UI.
+- No fake logo assets pretending to be official TIKI branding.
 
 ## Sync Checklist
 
-Before building or updating PROGRESS.md:
-
-- [ ] This brief matches `docs/PRD.md` goals and non-goals.
-- [ ] This brief covers all relevant `docs/FEATURES.md` modules.
-- [ ] This brief follows `docs/FRONTEND.md`; any conflict is resolved in favor of FRONTEND.md.
-- [ ] Selected references come from, or are added to, `docs/REFERENCES.md`.
-- [ ] Route/page intent here is reflected as tasks in `docs/PROGRESS.md`.
-- [ ] Any API/data needs implied by UX are reflected in `docs/API.md` and `packages/types`.
+- [x] This brief matches `docs/PRD.md` goals and non-goals.
+- [x] This brief covers all relevant `docs/FEATURES.md` modules.
+- [x] This brief follows `docs/DESIGN_DNA.md` and stack-agnostic `docs/FRONTEND.md` rules.
+- [x] Route/page intent here is reflected in `docs/PROGRESS.md`.
+- [x] API/data needs implied by UX are reflected in `docs/API.md` and `docs/DATABASE.md`.

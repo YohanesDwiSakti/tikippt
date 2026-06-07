@@ -1,221 +1,187 @@
 # Database
 
-> Open this for Supabase/Postgres work: schema design, migrations, RLS policies, indexes,
-> seed data, storage buckets, query performance, and data lifecycle decisions.
+> Open this for Supabase/Postgres work: schema design, migrations, RLS policies, indexes, seed data, storage buckets, query performance, and data lifecycle decisions.
 
 ## Role
 
-Supabase PostgreSQL is the source of truth for product data. Supabase Auth owns identities,
-and Supabase Storage owns uploaded files. The app should use standard Postgres patterns
-instead of inventing a custom persistence layer.
+Supabase PostgreSQL is the source of truth for FINPROPPT tracking, package status, driver assignment, and delivery proof data. Supabase Storage owns uploaded delivery proof photos. Supabase Auth is the preferred production identity provider, with app roles stored in `profiles`, unless a later ADR chooses a different auth model.
 
-This file is also the living data model catalog. Keep it updated as tables, columns,
-relationships, RLS policies, indexes, storage buckets, and data lifecycle rules change.
+All real schema changes must live in `supabase/migrations/`, with repeatable demo data in `supabase/seed.sql`.
+
+The template still includes Supabase helper scripts. Use `pnpm db:diff -- -f add_finproppt_core_tables` or another descriptive migration name to generate reviewed migrations, `pnpm db:push` only when applying committed migrations to the linked remote, and keep `packages/types/src/database.types.ts` refreshed while TypeScript database types remain part of the workspace checks.
 
 ## Data Model Catalog
 
-<!--
-  Fill this from PRD.md, FEATURES.md, API.md, and the actual migrations.
-  Keep it current. A developer should be able to open this section and understand
-  what tables exist, what each table is for, and how the important fields relate.
--->
+### `profiles`
 
-### Tables
+Purpose: Application profile and role linked to an authenticated user.
 
-<!--
-  One subsection per table. Delete the example once real tables exist.
--->
+| Column | Type | Required | Default | Notes |
+| --- | --- | --- | --- | --- |
+| `id` | `uuid` | yes | none | Primary key, references `auth.users.id` when Supabase Auth is used. |
+| `name` | `text` | yes | none | User-facing name. |
+| `email` | `text` | yes | none | Unique email. |
+| `role` | `text` | yes | none | `admin` or `driver`. |
+| `created_at` | `timestamptz` | yes | `now()` | Created timestamp. |
+| `updated_at` | `timestamptz` | yes | `now()` | Updated timestamp. |
 
-#### Example: `profiles` <!-- delete this example block -->
+RLS: users can read/update their own profile; admins can read driver profiles; service role handles trusted admin operations.
 
-Purpose: Public application profile linked to a Supabase Auth user.
+### `packages`
 
-| Column         | Type          | Required | Default | Notes                                    |
-| -------------- | ------------- | -------- | ------- | ---------------------------------------- |
-| `id`           | `uuid`        | yes      | none    | Primary key, references `auth.users.id`. |
-| `display_name` | `text`        | no       | none    | User-facing name.                        |
-| `avatar_url`   | `text`        | no       | none    | Public URL for avatar stored in Storage. |
-| `created_at`   | `timestamptz` | yes      | `now()` | Created timestamp.                       |
-| `updated_at`   | `timestamptz` | yes      | `now()` | Updated timestamp.                       |
+Purpose: Receipt/package record and latest status shown to customers.
 
-Relationships:
+| Column | Type | Required | Default | Notes |
+| --- | --- | --- | --- | --- |
+| `id` | `uuid` | yes | `gen_random_uuid()` | Primary key. |
+| `receipt` | `text` | yes | none | Unique uppercase receipt number. |
+| `destination` | `text` | yes | none | Destination address/city. |
+| `status` | `text` | yes | `Terdaftar` | Latest package status. |
+| `latest_location` | `text` | yes | none | Latest known package location. |
+| `current_driver_id` | `uuid` | no | none | Driver currently assigned. |
+| `created_by` | `uuid` | no | none | Admin profile that created package. |
+| `created_at` | `timestamptz` | yes | `now()` | Created timestamp. |
+| `updated_at` | `timestamptz` | yes | `now()` | Updated timestamp. |
 
-- `profiles.id` -> `auth.users.id`
+Indexes: unique `receipt`, status/updated order, current driver.
 
-RLS:
+### `package_events`
 
-- Read: <who can read rows>
-- Insert: <who can insert rows>
-- Update: <who can update rows>
-- Delete: <who can delete rows>
+Purpose: Timeline history for tracking responses and admin audit context.
 
-Indexes:
+| Column | Type | Required | Default | Notes |
+| --- | --- | --- | --- | --- |
+| `id` | `uuid` | yes | `gen_random_uuid()` | Primary key. |
+| `package_id` | `uuid` | yes | none | References `packages.id`. |
+| `status` | `text` | yes | none | Status at this event. |
+| `location` | `text` | yes | none | Location at this event. |
+| `note` | `text` | no | none | Short status note. |
+| `created_by` | `uuid` | no | none | Admin/driver profile that created event. |
+| `created_at` | `timestamptz` | yes | `now()` | Timeline order. |
 
-- Primary key on `id`.
+Lifecycle: append-only except administrative correction migrations.
 
-Lifecycle:
+### `driver_assignments`
 
-- <hard delete / soft delete / retention / audit notes>
+Purpose: Packages assigned by admin to drivers.
 
-### Relationships
+| Column | Type | Required | Default | Notes |
+| --- | --- | --- | --- | --- |
+| `id` | `uuid` | yes | `gen_random_uuid()` | Primary key. |
+| `package_id` | `uuid` | yes | none | References `packages.id`. |
+| `driver_id` | `uuid` | yes | none | References `profiles.id` with role `driver`. |
+| `assigned_by` | `uuid` | yes | none | Admin profile. |
+| `status` | `text` | yes | `Ditugaskan` | Assignment status. |
+| `note` | `text` | no | none | Admin note for driver. |
+| `assigned_at` | `timestamptz` | yes | `now()` | Assignment time. |
+| `updated_at` | `timestamptz` | yes | `now()` | Updated timestamp. |
 
-<!--
-  Summarize cross-table relationships so the data model is scannable without reading
-  every table block.
--->
+Notes: a package may have historical assignments, but only one active assignment should exist at a time.
 
-| From table | Column | To table  | Cardinality | Delete behavior  | Notes |
-| ---------- | ------ | --------- | ----------- | ---------------- | ----- |
-| `<table>`  | `<fk>` | `<table>` | one-to-many | restrict/cascade |       |
+### `delivery_proofs`
 
-### Enums And Status Values
+Purpose: Driver proof that package arrived at the destination.
 
-<!--
-  Keep durable status values here so API, database, and UI stay aligned.
--->
+| Column | Type | Required | Default | Notes |
+| --- | --- | --- | --- | --- |
+| `id` | `uuid` | yes | `gen_random_uuid()` | Primary key. |
+| `package_id` | `uuid` | yes | none | References `packages.id`. |
+| `assignment_id` | `uuid` | yes | none | References `driver_assignments.id`. |
+| `driver_id` | `uuid` | yes | none | Driver profile. |
+| `photo_url` | `text` | yes | none | Storage URL/path. |
+| `delivered_at` | `timestamptz` | yes | none | Time package arrived. |
+| `delivered_location` | `text` | yes | none | Human-readable destination/location proof. |
+| `latitude` | `numeric` | no | none | Optional GPS latitude. |
+| `longitude` | `numeric` | no | none | Optional GPS longitude. |
+| `note` | `text` | no | none | Driver note. |
+| `created_at` | `timestamptz` | yes | `now()` | Created timestamp. |
 
-| Name     | Values             | Used by          | Notes |
-| -------- | ------------------ | ---------------- | ----- |
-| `<enum>` | `<value>, <value>` | `<table.column>` |       |
+## Relationships
 
-### Indexes
+| From table | Column | To table | Cardinality | Delete behavior | Notes |
+| --- | --- | --- | --- | --- | --- |
+| `profiles` | `id` | `auth.users` | one-to-one | cascade | When Supabase Auth is used. |
+| `packages` | `current_driver_id` | `profiles.id` | many-to-one | set null | Current assigned driver. |
+| `package_events` | `package_id` | `packages.id` | many-to-one | cascade | Timeline belongs to package. |
+| `driver_assignments` | `package_id` | `packages.id` | many-to-one | restrict | Assignment history. |
+| `driver_assignments` | `driver_id` | `profiles.id` | many-to-one | restrict | Driver task list. |
+| `driver_assignments` | `assigned_by` | `profiles.id` | many-to-one | restrict | Admin assignment actor. |
+| `delivery_proofs` | `package_id` | `packages.id` | one-to-one or many-to-one | restrict | Usually one final proof per package. |
+| `delivery_proofs` | `assignment_id` | `driver_assignments.id` | one-to-one | restrict | Proof belongs to assignment. |
 
-<!--
-  Include important non-primary indexes and why they exist.
--->
+## Enums And Status Values
 
-| Table     | Index          | Columns     | Reason                             |
-| --------- | -------------- | ----------- | ---------------------------------- |
-| `<table>` | `<index_name>` | `<columns>` | `<query/filter/order it supports>` |
+| Name | Values | Used by | Notes |
+| --- | --- | --- | --- |
+| `user_role` | `admin`, `driver` | `profiles.role` | Customer tracking is public by receipt. |
+| `package_status` | `Terdaftar`, `Diangkut Driver`, `Dalam Perjalanan`, `Sampai Tujuan`, `Gagal Dikirim`, `Cancel` | `packages.status`, `package_events.status` | Keep API/UI aligned. |
+| `assignment_status` | `Ditugaskan`, `Diambil Driver`, `Dalam Perjalanan`, `Selesai`, `Gagal`, `Dibatalkan` | `driver_assignments.status` | Driver workflow. |
 
-### RLS Policy Matrix
+## Indexes
 
-<!--
-  Keep policy intent readable. SQL lives in migrations; the product rule lives here.
--->
+| Table | Index | Columns | Reason |
+| --- | --- | --- | --- |
+| `profiles` | `profiles_email_key` | `email` | Login/profile lookup. |
+| `packages` | `packages_receipt_key` | `receipt` | Tracking lookup. |
+| `packages` | `packages_status_updated_idx` | `status`, `updated_at` | Admin filters. |
+| `packages` | `packages_current_driver_idx` | `current_driver_id` | Driver assignment review. |
+| `package_events` | `package_events_package_created_idx` | `package_id`, `created_at` | Tracking timeline. |
+| `driver_assignments` | `driver_assignments_driver_status_idx` | `driver_id`, `status`, `assigned_at` | Driver task list. |
+| `driver_assignments` | `driver_assignments_package_active_idx` | `package_id`, `status` | Active assignment lookup. |
+| `delivery_proofs` | `delivery_proofs_package_idx` | `package_id` | Proof review by receipt. |
+| `delivery_proofs` | `delivery_proofs_driver_created_idx` | `driver_id`, `created_at` | Driver delivery history. |
 
-| Table     | Select   | Insert   | Update   | Delete   | Notes |
-| --------- | -------- | -------- | -------- | -------- | ----- |
-| `<table>` | `<rule>` | `<rule>` | `<rule>` | `<rule>` |       |
+## RLS Policy Matrix
 
-### Storage Buckets
+| Table | Select | Insert | Update | Delete | Notes |
+| --- | --- | --- | --- | --- | --- |
+| `profiles` | Own profile; admin reads drivers | Service/admin | Own limited fields; admin role changes | Admin only | Enforce role changes server-side. |
+| `packages` | Public by receipt via API; admin full; assigned driver limited | Admin service | Admin service; assigned driver only through proof/status endpoints | Admin only | Direct anon table access should be restricted. |
+| `package_events` | Public by receipt via API; admin/assigned driver limited | Service only | No normal update | Admin only | Append-only timeline. |
+| `driver_assignments` | Admin full; driver own assignments | Admin service | Admin service; driver own status through driver endpoints | Admin only | Drivers cannot see other drivers' work. |
+| `delivery_proofs` | Admin full; driver own proofs; public tracking gets safe summary only | Assigned driver service | Admin correction only | Admin only | Photo access should be controlled. |
 
-<!-- Fill only when the product uses Supabase Storage. -->
+## Storage Buckets
 
-| Bucket     | Purpose     | Path pattern           | Public? | RLS/policy summary |
-| ---------- | ----------- | ---------------------- | ------- | ------------------ |
-| `<bucket>` | `<purpose>` | `<user-or-org>/<file>` | yes/no  | `<rule>`           |
+| Bucket | Purpose | Path pattern | Public? | RLS/policy summary |
+| --- | --- | --- | --- | --- |
+| `delivery-proofs` | Driver delivery proof photos | `delivery-proofs/{receipt}/{uuid}.{ext}` | no by default | Assigned driver uploads through API; admin can review; customer receives safe signed/public view only when intended. |
 
-### Seed And Reference Data
+## Seed And Reference Data
 
-<!--
-  Document required static data, seed data, or product defaults.
--->
-
-| Name     | Where defined           | Purpose     | Notes |
-| -------- | ----------------------- | ----------- | ----- |
-| `<seed>` | `<migration/seed file>` | `<purpose>` |       |
+| Name | Where defined | Purpose | Notes |
+| --- | --- | --- | --- |
+| Demo admin | `supabase/seed.sql` | Admin login/testing | `admin@tiki.test`; no plaintext production passwords. |
+| Demo driver | `supabase/seed.sql` | Driver flow testing | `driver@tiki.test`. |
+| Sample packages | `supabase/seed.sql` | Tracking and assignment smoke tests | Keep deterministic and small. |
+| Sample assignment | `supabase/seed.sql` | Driver task list smoke test | Assign one package to demo driver. |
 
 ## Schema Principles
 
 - Model real product concepts, not screens.
 - Prefer clear table names: plural, lowercase, `snake_case`.
-- Use `uuid` primary keys unless a different key is justified.
+- Use `uuid` primary keys.
 - Add `created_at` and `updated_at` where records are user or business objects.
-- Use foreign keys for relationships.
+- Use foreign keys for relationships where practical.
 - Add indexes for frequent filters, joins, and ordering.
-- Avoid JSON blobs for data you need to query, filter, join, or authorize.
-- Do not add an ORM unless a new ADR accepts it.
+- Avoid JSON blobs for data that must be queried, filtered, joined, or authorized.
+- Do not add payment tables or payment provider fields.
 
-## RLS And Access
-
-Row Level Security is required on every user-facing table.
-
-- Browser access uses the Supabase anon key and must be safe under RLS.
-- Trusted server operations use the service-role key from `apps/server` only.
-- Policies should be explicit and easy to reason about.
-- Never rely on client-side filtering for authorization.
-
-Typical policy questions:
-
-- Who can read this row?
-- Who can create it?
-- Who can update it?
-- Who can delete it?
-- Is access based on `auth.uid()`, organization membership, ownership, role, or public
-  visibility?
-
-## Migrations
-
-Use migrations for schema changes. Do not make manual dashboard-only changes that the repo
-cannot reproduce.
-
-Migrations live in `supabase/migrations/`. Seed data for local development lives in
-`supabase/seed.sql`. Generated database types live in
-`packages/types/src/database.types.ts`.
-
-Supabase CLI may generate migration SQL for you, but the workflow is still
-migration-based:
-
-1. Make schema changes locally or in the linked development project.
-2. Generate a migration with `pnpm db:diff -- -f <migration_name>` or create an empty one
-   with `pnpm db:new <migration_name>`.
-3. Review and edit the generated SQL. Do not blindly trust generated diffs.
-4. Apply locally with `pnpm db:reset` when testing from a clean state.
-5. Regenerate types with `pnpm db:types`.
-6. Update this Data Model Catalog.
-7. Apply to the linked remote only when ready with `pnpm db:push`.
-
-Avoid direct production/dashboard-only changes. If you must inspect or prototype in the
-dashboard, pull or recreate the change as a committed migration before treating it as part
-of the product.
-
-Migration checklist:
+## Migration Checklist
 
 - [ ] Tables, columns, constraints, and indexes are included.
 - [ ] RLS is enabled where needed.
 - [ ] Policies are included.
 - [ ] Seed/reference data is intentional and repeatable.
-- [ ] `packages/types/src/database.types.ts` is regenerated when schema changes.
-- [ ] The Data Model Catalog above is updated.
+- [ ] Generated database types or schema artifacts are refreshed when the workflow exists.
+- [ ] This Data Model Catalog is updated.
 - [ ] Roll-forward strategy is clear if production data exists.
-
-## Storage
-
-Use Supabase Storage for user-uploaded files.
-
-- Buckets need RLS policies.
-- Store file metadata and public URLs in Postgres when the product needs to query them.
-- Store files under user or organization scoped paths.
-- Do not store large file bytes or base64 content in Postgres.
-
-## Query And Performance Rules
-
-- Paginate list queries.
-- Add indexes before shipping queries that filter or sort large tables.
-- Select only columns needed by the API/view.
-- Avoid N+1 query patterns in server services.
-- Keep expensive reporting queries behind dedicated endpoints or materialized views when
-  needed.
-
-## Data Lifecycle
-
-Decide per feature:
-
-- Hard delete vs soft delete.
-- Audit trail requirements.
-- Retention and export needs.
-- Whether records are tenant-scoped, user-scoped, or public.
-
-Do not add soft delete globally just in case. Add it when the feature needs recovery,
-auditability, legal retention, or payment/order history.
 
 ## Sync Checklist
 
 - [ ] Schema changes match `docs/FEATURES.md` and `docs/API.md`.
-- [ ] Data Model Catalog is updated for new/changed tables, columns, relationships, RLS,
-      indexes, storage buckets, and lifecycle rules.
-- [ ] API contracts in `packages/types` match persisted data shape where applicable.
+- [ ] Data Model Catalog is updated for tables, columns, relationships, RLS, indexes, storage buckets, and lifecycle rules.
+- [ ] API contracts match persisted data shape.
 - [ ] RLS policies protect every user-facing table.
 - [ ] Storage buckets and policies are documented when used.
 - [ ] Performance-sensitive queries have indexes.
