@@ -48,7 +48,7 @@
         <div class="page-shell footer-grid">
             <div class="footer-brand">
                 <strong>FINPROPPT TIKI Denpasar</strong>
-                <span>Tracking resi, pembagian paket driver, dan bukti sampai tujuan.</span>
+                <span>Layanan tracking, estimasi harga, lokasi gerai, dan bukti sampai tujuan untuk operasional pengiriman lokal.</span>
             </div>
             <div class="footer-column">
                 <span class="footer-title">Layanan</span>
@@ -73,6 +73,8 @@
                 <span class="footer-title">Kontak</span>
                 <a href="{{ route('support') }}">Support</a>
                 <a href="{{ route('about') }}">About</a>
+                <a href="https://instagram.com/tikidenpasar">@tikidenpasar</a>
+                <a href="https://wa.me/6281234567801">WhatsApp Hub</a>
                 <span>Hub Denpasar</span>
                 <span>Operasional 08.00-17.00 WITA</span>
             </div>

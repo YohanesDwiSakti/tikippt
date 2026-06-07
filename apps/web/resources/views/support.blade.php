@@ -7,37 +7,64 @@
         <div class="page-heading">
             <div>
                 <p class="eyebrow">Support</p>
-                <h1 style="font-size: 48px;">Bantuan operasional paket</h1>
-                <p class="lead">Gunakan halaman ini untuk melihat jalur bantuan customer, admin hub, dan driver.</p>
+                <h1 style="font-size: 48px;">Kontak bantuan dan informasi operasional</h1>
+                <p class="lead">Hubungi tim sesuai kebutuhan: pertanyaan resi, bantuan admin, kendala driver, atau permintaan update data paket.</p>
             </div>
         </div>
 
-        <div class="grid-3">
+        <div class="support-layout">
             <article class="panel">
-                <span class="badge badge-brand">Customer</span>
-                <h3 style="margin-top: 16px;">Bantuan cek resi</h3>
-                <p class="helper">Pastikan nomor resi benar, lalu gunakan halaman Cek Resi untuk melihat timeline terbaru.</p>
-                <a class="button button-secondary" href="{{ route('tracking') }}">Cek Resi</a>
+                <span class="badge badge-brand">Customer Care</span>
+                <h2 style="margin-top: 16px;">Kontak utama</h2>
+                <div class="contact-list">
+                    <a href="tel:+62361000101"><span>Telepon</span><strong>0361 000 101</strong></a>
+                    <a href="https://wa.me/6281234567801"><span>WhatsApp</span><strong>0812 3456 7801</strong></a>
+                    <a href="mailto:support@finproppt.test"><span>Email</span><strong>support@finproppt.test</strong></a>
+                    <a href="https://instagram.com/tikidenpasar"><span>Instagram</span><strong>@tikidenpasar</strong></a>
+                </div>
             </article>
-            <article class="panel">
-                <span class="badge badge-brand">Admin</span>
-                <h3 style="margin-top: 16px;">Status paket</h3>
-                <p class="helper">Admin dapat memperbarui status, lokasi terakhir, dan membagi paket ke driver.</p>
-                <a class="button button-secondary" href="{{ route('login') }}">Login Admin</a>
-            </article>
-            <article class="panel">
-                <span class="badge badge-brand">Driver</span>
-                <h3 style="margin-top: 16px;">Bukti sampai</h3>
-                <p class="helper">Driver mengirim foto, waktu, lokasi, dan catatan saat paket diterima di tujuan.</p>
-                <a class="button button-secondary" href="{{ route('login') }}">Login Driver</a>
+
+            <article class="panel panel-muted">
+                <h2>Jam layanan</h2>
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <div class="meta-label">Senin-Jumat</div>
+                        <div class="meta-value">08.00-17.00 WITA</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Sabtu</div>
+                        <div class="meta-value">08.00-14.00 WITA</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Minggu/libur</div>
+                        <div class="meta-value">Monitoring terbatas</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Area</div>
+                        <div class="meta-value">Denpasar, Sanur, Gianyar, Ubud</div>
+                    </div>
+                </div>
             </article>
         </div>
 
         <section class="section-tight">
-            <article class="panel panel-muted">
-                <h2>Kontak bantuan</h2>
-                <p class="helper">Hub Denpasar melayani pertanyaan resi dan status paket pada 08.00-17.00 WITA. Untuk kebutuhan mendesak, siapkan nomor resi sebelum menghubungi petugas.</p>
-            </article>
+            <div class="grid-3">
+                <article class="panel">
+                    <span class="badge badge-brand">Resi</span>
+                    <h3 style="margin-top: 16px;">Sebelum menghubungi</h3>
+                    <p class="helper">Siapkan nomor resi, nama penerima, area tujuan, dan status terakhir yang terlihat di halaman layanan.</p>
+                </article>
+                <article class="panel">
+                    <span class="badge badge-brand">Admin</span>
+                    <h3 style="margin-top: 16px;">Koreksi data paket</h3>
+                    <p class="helper">Untuk perubahan status, tujuan, atau driver, hubungi admin hub dan sertakan alasan koreksi.</p>
+                </article>
+                <article class="panel">
+                    <span class="badge badge-brand">Driver</span>
+                    <h3 style="margin-top: 16px;">Kendala pengantaran</h3>
+                    <p class="helper">Laporkan alamat tidak ditemukan, penerima tidak di tempat, atau bukti foto gagal upload.</p>
+                </article>
+            </div>
         </section>
     </section>
 @endsection

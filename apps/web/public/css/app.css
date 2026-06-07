@@ -409,6 +409,87 @@ h3 {
     gap: 16px;
 }
 
+.process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.process-step {
+    border-top: 2px solid hsl(var(--brand));
+    padding-top: 16px;
+}
+
+.process-step span {
+    display: block;
+    margin-bottom: 12px;
+    color: hsl(var(--brand));
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.process-step strong {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.process-step p {
+    color: hsl(var(--muted-foreground));
+    font-size: 14px;
+}
+
+.about-layout,
+.support-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+    gap: 16px;
+}
+
+.check-list {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding-left: 18px;
+    color: hsl(var(--muted-foreground));
+}
+
+.contact-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.contact-list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    background: white;
+    padding: 12px;
+    transition: border-color 150ms ease, transform 150ms ease;
+}
+
+.contact-list a:hover {
+    border-color: hsl(var(--brand));
+}
+
+.contact-list a:active {
+    transform: scale(0.98);
+}
+
+.contact-list span {
+    color: hsl(var(--muted-foreground));
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.contact-list strong {
+    color: hsl(var(--foreground));
+    text-align: right;
+}
+
 .app-layout {
     display: grid;
     grid-template-columns: 248px minmax(0, 1fr);
@@ -743,6 +824,9 @@ h3 {
     }
 
     .grid-3,
+    .process-grid,
+    .about-layout,
+    .support-layout,
     .form-grid,
     .rate-grid,
     .location-grid {
