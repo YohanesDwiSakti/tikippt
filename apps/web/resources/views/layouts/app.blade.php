@@ -19,9 +19,19 @@
             <div class="nav-links">
                 <a class="nav-link" href="{{ route('home') }}" @if(request()->routeIs('home')) aria-current="page" @endif>Beranda</a>
                 <a class="nav-link" href="{{ route('tracking') }}" @if(request()->routeIs('tracking')) aria-current="page" @endif>Cek Resi</a>
-                <a class="nav-link" href="{{ route('login') }}" @if(request()->routeIs('login')) aria-current="page" @endif>Login</a>
-                <a class="nav-link" href="{{ route('admin.dashboard') }}" @if(request()->is('admin*')) aria-current="page" @endif>Admin</a>
-                <a class="nav-link" href="{{ route('driver.index') }}" @if(request()->is('driver*')) aria-current="page" @endif>Driver</a>
+                @if(session('auth_role') === 'admin')
+                    <a class="nav-link" href="{{ route('admin.dashboard') }}" @if(request()->is('admin*')) aria-current="page" @endif>Admin</a>
+                @elseif(session('auth_role') === 'driver')
+                    <a class="nav-link" href="{{ route('driver.index') }}" @if(request()->is('driver*')) aria-current="page" @endif>Driver</a>
+                @else
+                    <a class="nav-link" href="{{ route('login') }}" @if(request()->routeIs('login')) aria-current="page" @endif>Login</a>
+                @endif
+                @if(session('auth_role'))
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button class="nav-link nav-button" type="submit">Logout</button>
+                    </form>
+                @endif
             </div>
         </nav>
     </header>

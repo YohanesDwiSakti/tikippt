@@ -1,6 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+
+function guardRole(string $role)
+{
+    if (session('auth_role') === $role) {
+        return null;
+    }
+
+    return redirect()
+        ->route('login', ['redirect' => request()->path()])
+        ->with('auth_notice', 'Silakan login dulu untuk membuka halaman tersebut.');
+}
 
 $packages = [
     [
@@ -87,7 +99,42 @@ Route::get('/tracking', function () use ($packages) {
 
 Route::get('/login', fn () => view('login'))->name('login');
 
+Route::post('/login', function (Request $request) {
+    $data = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required', 'string'],
+        'role' => ['required', 'in:admin,driver'],
+        'redirect' => ['nullable', 'string'],
+    ]);
+
+    session()->regenerate();
+    session([
+        'auth_role' => $data['role'],
+        'auth_email' => $data['email'],
+        'auth_name' => $data['role'] === 'admin' ? 'Admin Hub' : 'Made Driver',
+    ]);
+
+    $redirect = trim($data['redirect'] ?? '', '/');
+    if ($redirect !== '' && str_starts_with($redirect, $data['role'])) {
+        return redirect('/' . $redirect);
+    }
+
+    return redirect()->route($data['role'] === 'admin' ? 'admin.dashboard' : 'driver.index');
+})->name('login.submit');
+
+Route::post('/logout', function () {
+    session()->forget(['auth_role', 'auth_email', 'auth_name']);
+    session()->invalidate();
+    session()->regenerateToken();
+
+    return redirect()->route('login')->with('auth_notice', 'Anda sudah logout.');
+})->name('logout');
+
 Route::get('/admin', function () use ($packages, $drivers) {
+    if ($redirect = guardRole('admin')) {
+        return $redirect;
+    }
+
     return view('admin.dashboard', [
         'packages' => $packages,
         'drivers' => $drivers,
@@ -95,10 +142,18 @@ Route::get('/admin', function () use ($packages, $drivers) {
 })->name('admin.dashboard');
 
 Route::get('/admin/packages', function () use ($packages) {
+    if ($redirect = guardRole('admin')) {
+        return $redirect;
+    }
+
     return view('admin.packages', ['packages' => $packages]);
 })->name('admin.packages');
 
 Route::get('/admin/assignments', function () use ($packages, $drivers) {
+    if ($redirect = guardRole('admin')) {
+        return $redirect;
+    }
+
     return view('admin.assignments', [
         'packages' => $packages,
         'drivers' => $drivers,
@@ -106,18 +161,30 @@ Route::get('/admin/assignments', function () use ($packages, $drivers) {
 })->name('admin.assignments');
 
 Route::get('/admin/proofs', function () use ($packages) {
+    if ($redirect = guardRole('admin')) {
+        return $redirect;
+    }
+
     return view('admin.proofs', [
         'packages' => array_filter($packages, fn (array $package): bool => $package['proof'] !== null),
     ]);
 })->name('admin.proofs');
 
 Route::get('/driver', function () use ($packages) {
+    if ($redirect = guardRole('driver')) {
+        return $redirect;
+    }
+
     return view('driver.index', [
         'packages' => array_filter($packages, fn (array $package): bool => $package['driver'] === 'Made Driver'),
     ]);
 })->name('driver.index');
 
 Route::get('/driver/proof/{receipt}', function (string $receipt) use ($packages) {
+    if ($redirect = guardRole('driver')) {
+        return $redirect;
+    }
+
     $package = collect($packages)->firstWhere('receipt', strtoupper($receipt));
 
     abort_if(! $package, 404);
