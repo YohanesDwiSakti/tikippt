@@ -367,8 +367,10 @@ h3 {
 }
 
 .badge-brand {
-    background: hsl(var(--brand) / 0.1);
-    color: hsl(var(--brand));
+    background: transparent;
+    color: hsl(var(--muted-foreground));
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .timeline {
@@ -419,13 +421,12 @@ h3 {
     display: grid;
     align-content: start;
     gap: 12px;
-    border-top: 2px solid hsl(var(--brand));
-    padding-top: 16px;
+    padding-top: 0;
     transition: color 150ms ease, transform 150ms ease;
 }
 
 .service-link:hover {
-    color: hsl(var(--brand));
+    color: hsl(var(--foreground));
     transform: translateY(-2px);
 }
 
@@ -456,14 +457,13 @@ h3 {
 }
 
 .process-step {
-    border-top: 2px solid hsl(var(--brand));
-    padding-top: 16px;
+    padding-top: 0;
 }
 
 .process-step span {
     display: block;
     margin-bottom: 12px;
-    color: hsl(var(--brand));
+    color: hsl(var(--muted-foreground));
     font-size: 13px;
     font-weight: 700;
 }
