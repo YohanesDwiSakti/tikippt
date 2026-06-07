@@ -151,10 +151,10 @@ Purpose: Driver proof that package arrived at the destination.
 
 | Name | Where defined | Purpose | Notes |
 | --- | --- | --- | --- |
-| Demo admin | `supabase/seed.sql` | Admin login/testing | `admin@tiki.test`; no plaintext production passwords. |
-| Demo driver | `supabase/seed.sql` | Driver flow testing | `driver@tiki.test`. |
-| Sample packages | `supabase/seed.sql` | Tracking and assignment smoke tests | Keep deterministic and small. |
-| Sample assignment | `supabase/seed.sql` | Driver task list smoke test | Assign one package to demo driver. |
+| Demo admin Auth user | Supabase dashboard/Auth API | Admin login/testing | Create Auth user first, then insert matching `profiles` row with role `admin`. |
+| Demo driver Auth user | Supabase dashboard/Auth API | Driver flow testing | Create Auth user first, then insert matching `profiles` row with role `driver`. |
+| Sample packages | `supabase/seed.sql` | Tracking smoke tests | Keep deterministic and small. |
+| Sample package events | `supabase/seed.sql` | Tracking timeline smoke tests | Does not require Auth users. |
 
 ## Schema Principles
 

@@ -4,7 +4,7 @@
 
 ## Role
 
-`apps/server` is the trusted Go backend boundary. It owns API routes, server-only secrets, Supabase service-role operations, package status transitions, driver assignment, and delivery proof submission. Payment, invoice, checkout, and Midtrans logic are not part of this project.
+`apps/server` is the trusted Go backend boundary. It owns API routes, server-only database credentials, Supabase Auth checks, package status transitions, driver assignment, and delivery proof submission. Payment, invoice, checkout, and Midtrans logic are not part of this project.
 
 The API contract source of truth is `docs/API.md`. This file explains how backend code should be structured and verified.
 
@@ -71,8 +71,8 @@ Keep files focused:
 - Plaintext passwords are prototype-only and not allowed for production implementation.
 - Preferred production auth is Supabase Auth plus a role-bearing `profiles` table, unless a later ADR chooses Laravel session auth plus API tokens.
 - Protected endpoints require an authenticated user and role authorization.
-- Server-only secrets stay in Go environment variables and never use public prefixes.
-- Supabase service-role key is only used from trusted server code.
+- Server-only database credentials stay in Go environment variables and never use public prefixes.
+- Supabase Auth login uses the public publishable/anon key; Auth Admin user creation is done in the Supabase dashboard or with a valid service-role JWT outside normal runtime.
 
 ## Error Handling
 

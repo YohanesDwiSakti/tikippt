@@ -2,29 +2,14 @@
   "name": "@repo/server",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests"
+    "dev": "set GOCACHE=%CD%\\..\\..\\.cache\\go-build&& go run ./cmd/api",
+    "build": "set GOCACHE=%CD%\\..\\..\\.cache\\go-build&& go build -o finproppt-api.exe ./cmd/api",
+    "start": "set GOCACHE=%CD%\\..\\..\\.cache\\go-build&& go run ./cmd/api",
+    "lint": "set GOCACHE=%CD%\\..\\..\\.cache\\go-build&& go vet ./...",
+    "typecheck": "set GOCACHE=%CD%\\..\\..\\.cache\\go-build&& go test ./...",
+    "test": "set GOCACHE=%CD%\\..\\..\\.cache\\go-build&& go test ./..."
   },
-  "dependencies": {
-    "@hono/node-server": "^1.13.0",
-    "@repo/types": "workspace:*",
-    "@repo/utils": "workspace:*",
-    "@supabase/supabase-js": "^2.45.0",
-    "hono": "^4.6.0",
-    "zod": "^3.23.0"
-  },
-  "devDependencies": {
-    "@repo/config": "workspace:*",
-    "@types/node": "^20.0.0",
-    "eslint": "^9.0.0",
-    "tsx": "^4.19.0",
-    "typescript": "^5.4.0",
-    "vitest": "^2.0.0"
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }
