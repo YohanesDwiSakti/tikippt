@@ -413,6 +413,11 @@ h3 {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 24px;
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    background: hsl(var(--surface));
+    box-shadow: 0 16px 40px hsl(221 34% 8% / 0.08);
+    padding: 24px;
 }
 
 .service-link {
