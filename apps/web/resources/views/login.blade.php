@@ -26,7 +26,7 @@
             </div>
         @endif
 
-        <form class="panel form-grid" method="POST" action="{{ route('login.submit') }}">
+        <form class="panel form-grid" method="POST" action="/login">
             @csrf
             <input type="hidden" name="redirect" value="{{ request('redirect') }}">
             <div class="field full">

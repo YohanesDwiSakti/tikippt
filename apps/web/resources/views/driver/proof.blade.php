@@ -32,7 +32,7 @@
             @if($errors->any())
                 <div class="notice notice-danger">{{ $errors->first() }}</div>
             @endif
-            <form class="form-grid" method="POST" action="{{ route('driver.proof.store', ['receipt' => $package['receipt']]) }}" enctype="multipart/form-data">
+            <form class="form-grid" method="POST" action="/driver/proof/{{ $package['receipt'] }}" enctype="multipart/form-data">
                 @csrf
                 <div class="field full">
                     <label>Foto bukti</label>

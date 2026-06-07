@@ -1,8 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Request;
 use App\Support\SupabaseGateway;
+
+if (app()->environment('production')) {
+    URL::forceScheme('https');
+}
 
 function guardRole(string $role)
 {
@@ -130,7 +135,7 @@ Route::post('/login', function (Request $request, SupabaseGateway $supabase) {
     return redirect()->route($data['role'] === 'admin' ? 'admin.dashboard' : 'driver.index');
 })->name('login.submit');
 
-Route::post('/logout', function () {
+Route::match(['GET', 'POST'], '/logout', function () {
     session()->forget(['auth_id', 'auth_role', 'auth_email', 'auth_name', 'auth_token']);
     session()->invalidate();
     session()->regenerateToken();

@@ -21,7 +21,7 @@
             @if($errors->any())
                 <div class="notice notice-danger">{{ $errors->first() }}</div>
             @endif
-            <form class="content-stack" method="POST" action="{{ route('admin.assignments.store') }}">
+            <form class="content-stack" method="POST" action="/admin/assignments">
                 @csrf
 
                 <article class="panel">

@@ -23,7 +23,7 @@
                 @if($errors->any())
                     <div class="notice notice-danger">{{ $errors->first() }}</div>
                 @endif
-                <form class="form-grid" method="POST" action="{{ route('admin.packages.store') }}">
+                <form class="form-grid" method="POST" action="/admin/packages">
                     @csrf
                     <div class="field">
                         <label>Nomor resi</label>
