@@ -1,5 +1,7 @@
 @php
     $locale = session('locale', 'id');
+    $nextLocale = $locale === 'id' ? 'en' : 'id';
+    $nextLanguageLabel = $locale === 'id' ? 'English' : 'Indonesia';
     app()->setLocale($locale);
 @endphp
 <!doctype html>
@@ -26,10 +28,13 @@
                 <a class="nav-link" href="{{ route('about') }}" @if(request()->routeIs('about')) aria-current="page" @endif>{{ __('messages.nav.about') }}</a>
             </div>
             <div class="nav-account" aria-label="{{ __('messages.nav.account') }}">
-                <div class="language-toggle" aria-label="{{ __('messages.nav.language') }}">
-                    <a href="{{ route('language.switch', ['locale' => 'id']) }}" @if($locale === 'id') aria-current="page" @endif>ID</a>
-                    <a href="{{ route('language.switch', ['locale' => 'en']) }}" @if($locale === 'en') aria-current="page" @endif>EN</a>
-                </div>
+                <a class="language-button" href="{{ route('language.switch', ['locale' => $nextLocale]) }}" aria-label="{{ __('messages.nav.language') }}: {{ $nextLanguageLabel }}" title="{{ $nextLanguageLabel }}">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18">
+                        <path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                        <path d="M3.8 9h16.4M3.8 15h16.4M12 3c2 2.4 3 5.4 3 9s-1 6.6-3 9M12 3c-2 2.4-3 5.4-3 9s1 6.6 3 9" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8"/>
+                    </svg>
+                    <span>{{ strtoupper($nextLocale) }}</span>
+                </a>
                 <a class="nav-link" href="{{ route('support') }}" @if(request()->routeIs('support')) aria-current="page" @endif>{{ __('messages.nav.support') }}</a>
                 @if(session('auth_role') === 'admin')
                     <a class="nav-link" href="{{ route('admin.dashboard') }}" @if(request()->is('admin*')) aria-current="page" @endif>{{ __('messages.nav.dashboard') }}</a>

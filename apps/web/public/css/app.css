@@ -156,42 +156,39 @@ img {
     display: inline-flex;
 }
 
-.language-toggle {
-    display: inline-grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 4px;
-    border: 1px solid hsl(var(--border));
-    border-radius: var(--radius);
-    background: hsl(var(--muted));
-    padding: 4px;
-}
-
-.language-toggle a {
+.language-button {
     display: inline-flex;
-    min-height: 32px;
+    min-height: 40px;
     align-items: center;
     justify-content: center;
-    border-radius: calc(var(--radius) - 2px);
+    gap: 6px;
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    background: white;
     color: hsl(var(--muted-foreground));
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
-    padding: 6px 10px;
-    transition: background-color 150ms ease, color 150ms ease, transform 150ms ease;
+    padding: 8px 10px;
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, transform 150ms ease;
 }
 
-.language-toggle a:hover,
-.language-toggle a[aria-current="page"] {
-    background: white;
+.language-button:hover {
+    border-color: hsl(var(--brand) / 0.35);
+    background: hsl(var(--muted));
     color: hsl(var(--foreground));
 }
 
-.language-toggle a:active {
+.language-button:active {
     transform: scale(0.98);
 }
 
-.language-toggle a:focus-visible {
+.language-button:focus-visible {
     box-shadow: 0 0 0 2px hsl(var(--ring)), 0 0 0 4px white;
     outline: none;
+}
+
+.language-button svg {
+    flex: 0 0 auto;
 }
 
 .page-shell {
