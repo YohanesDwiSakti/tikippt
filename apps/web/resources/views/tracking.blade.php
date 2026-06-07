@@ -1,44 +1,44 @@
 @extends('layouts.app')
 
-@section('title', 'Layanan')
+@section('title', __('messages.tracking.title'))
 
 @section('content')
     <section class="page-shell section">
         <div class="page-heading">
             <div>
-                <p class="eyebrow">Layanan Publik</p>
-                <h1 style="font-size: 48px;">Cek resi, harga, dan lokasi dalam satu halaman</h1>
-                <p class="lead">Pilih tab layanan yang dibutuhkan. Setiap tab punya form dan hasilnya sendiri tanpa perlu scroll ke bagian lain.</p>
+                <p class="eyebrow">{{ __('messages.tracking.eyebrow') }}</p>
+                <h1 style="font-size: 48px;">{{ __('messages.tracking.heading') }}</h1>
+                <p class="lead">{{ __('messages.tracking.copy') }}</p>
             </div>
         </div>
 
         <div class="tool-tabs" aria-label="Pilihan layanan publik">
-            <a href="{{ route('tracking', ['tab' => 'resi']) }}" @if($activeTab === 'resi') aria-current="page" @endif>Cek Resi</a>
-            <a href="{{ route('tracking', ['tab' => 'harga']) }}" @if($activeTab === 'harga') aria-current="page" @endif>Cek Harga</a>
-            <a href="{{ route('tracking', ['tab' => 'lokasi']) }}" @if($activeTab === 'lokasi') aria-current="page" @endif>Cek Lokasi</a>
+            <a href="{{ route('tracking', ['tab' => 'resi']) }}" @if($activeTab === 'resi') aria-current="page" @endif>{{ __('messages.tracking.tab_receipt') }}</a>
+            <a href="{{ route('tracking', ['tab' => 'harga']) }}" @if($activeTab === 'harga') aria-current="page" @endif>{{ __('messages.tracking.tab_price') }}</a>
+            <a href="{{ route('tracking', ['tab' => 'lokasi']) }}" @if($activeTab === 'lokasi') aria-current="page" @endif>{{ __('messages.tracking.tab_location') }}</a>
         </div>
 
         @if($activeTab === 'resi')
             <section class="service-section">
                 <div class="section-heading">
                     <div>
-                        <p class="eyebrow">Cek Resi</p>
-                        <h2>Status paket</h2>
+                        <p class="eyebrow">{{ __('messages.tracking.tab_receipt') }}</p>
+                        <h2>{{ __('messages.tracking.receipt_heading') }}</h2>
                     </div>
                 </div>
 
                 <form class="tracking-form" action="{{ route('tracking') }}" method="get" style="margin-bottom: 24px;">
                     <input type="hidden" name="tab" value="resi">
-                    <input class="input" name="receipt" value="{{ $receipt }}" placeholder="TKI-DEN-260607101500" aria-label="Nomor resi">
-                    <button class="button button-primary" type="submit">Cek Resi</button>
+                    <input class="input" name="receipt" value="{{ $receipt }}" placeholder="TKI-DEN-260607101500" aria-label="{{ __('messages.home.receipt_label') }}">
+                    <button class="button button-primary" type="submit">{{ __('messages.tracking.tab_receipt') }}</button>
                 </form>
 
                 @if($receipt)
                     @include('partials.status-panel', ['selected' => $selected])
                 @else
                     <article class="panel panel-muted">
-                        <strong>Belum ada resi dicari</strong>
-                        <p class="helper">Gunakan contoh TKI-DEN-260607101500 untuk melihat state mock.</p>
+                        <strong>{{ __('messages.tracking.empty_receipt_title') }}</strong>
+                        <p class="helper">{{ __('messages.tracking.empty_receipt_copy') }}</p>
                     </article>
                 @endif
             </section>
@@ -48,63 +48,63 @@
             <section class="service-section">
                 <div class="section-heading">
                     <div>
-                        <p class="eyebrow">Cek Harga</p>
-                        <h2>Estimasi ongkir</h2>
-                        <p>Hitung biaya kirim berdasarkan asal, tujuan, berat, dan dimensi paket.</p>
+                        <p class="eyebrow">{{ __('messages.tracking.tab_price') }}</p>
+                        <h2>{{ __('messages.tracking.price_heading') }}</h2>
+                        <p>{{ __('messages.tracking.price_copy') }}</p>
                     </div>
                 </div>
 
                 <form class="panel form-grid" action="{{ route('tracking') }}" method="get">
                     <input type="hidden" name="tab" value="harga">
                     <div class="field">
-                        <label>Dari</label>
+                        <label>{{ __('messages.tracking.from') }}</label>
                         <input class="input" name="origin" value="{{ $origin }}" placeholder="Denpasar">
                     </div>
                     <div class="field">
-                        <label>Tujuan</label>
+                        <label>{{ __('messages.tracking.destination') }}</label>
                         <input class="input" name="destination" value="{{ $destination }}" placeholder="Gianyar">
                     </div>
                     <div class="field">
-                        <label>Berat</label>
+                        <label>{{ __('messages.tracking.weight') }}</label>
                         <div class="input-addon">
                             <input class="input" name="weight" type="number" min="1" step="0.1" value="{{ $weight }}" placeholder="1">
                             <span>Kg</span>
                         </div>
                     </div>
                     <div class="field">
-                        <label>Panjang</label>
+                        <label>{{ __('messages.tracking.length') }}</label>
                         <div class="input-addon">
-                            <input class="input" name="length" type="number" min="0" value="{{ $length }}" placeholder="Panjang">
+                            <input class="input" name="length" type="number" min="0" value="{{ $length }}" placeholder="{{ __('messages.tracking.length') }}">
                             <span>Cm</span>
                         </div>
                     </div>
                     <div class="field">
-                        <label>Lebar</label>
+                        <label>{{ __('messages.tracking.width') }}</label>
                         <div class="input-addon">
-                            <input class="input" name="width" type="number" min="0" value="{{ $width }}" placeholder="Lebar">
+                            <input class="input" name="width" type="number" min="0" value="{{ $width }}" placeholder="{{ __('messages.tracking.width') }}">
                             <span>Cm</span>
                         </div>
                     </div>
                     <div class="field">
-                        <label>Tinggi</label>
+                        <label>{{ __('messages.tracking.height') }}</label>
                         <div class="input-addon">
-                            <input class="input" name="height" type="number" min="0" value="{{ $height }}" placeholder="Tinggi">
+                            <input class="input" name="height" type="number" min="0" value="{{ $height }}" placeholder="{{ __('messages.tracking.height') }}">
                             <span>Cm</span>
                         </div>
                     </div>
                     <div class="full form-actions">
-                        <button class="button button-primary" type="submit">Cek Harga</button>
+                        <button class="button button-primary" type="submit">{{ __('messages.tracking.tab_price') }}</button>
                     </div>
                 </form>
 
                 <div class="section-tight">
-                    <p class="helper">Berat tagihan {{ $chargeableWeight }} kg @if($volumeWeight > 0) dari berat volume {{ $volumeWeight }} kg @endif.</p>
+                    <p class="helper">{{ __('messages.tracking.billable_weight', ['weight' => $chargeableWeight]) }} @if($volumeWeight > 0) {{ __('messages.tracking.volume_weight', ['weight' => $volumeWeight]) }} @endif.</p>
                     <div class="rate-grid">
                         @foreach($rates as $rate)
                             <article class="panel">
                                 <span class="badge badge-brand">{{ $rate['service'] }}</span>
                                 <h3 style="margin-top: 16px;">{{ $rate['label'] }}</h3>
-                                <p class="helper">{{ $origin }} ke {{ $destination }} - {{ $rate['eta'] }}</p>
+                                <p class="helper">{{ __('messages.tracking.route_eta', ['origin' => $origin, 'destination' => $destination, 'eta' => $rate['eta']]) }}</p>
                                 <div class="price">Rp{{ number_format($rate['price'], 0, ',', '.') }}</div>
                             </article>
                         @endforeach
@@ -117,16 +117,16 @@
             <section class="service-section">
                 <div class="section-heading">
                     <div>
-                        <p class="eyebrow">Cek Lokasi</p>
-                        <h2>Hub dan gerai</h2>
-                        <p>Cari lokasi layanan untuk drop paket, ambil paket, dan bantuan resi.</p>
+                        <p class="eyebrow">{{ __('messages.tracking.tab_location') }}</p>
+                        <h2>{{ __('messages.tracking.location_heading') }}</h2>
+                        <p>{{ __('messages.tracking.location_copy') }}</p>
                     </div>
                 </div>
 
                 <form class="tracking-form" action="{{ route('tracking') }}" method="get" style="margin-bottom: 24px;">
                     <input type="hidden" name="tab" value="lokasi">
-                    <input class="input" name="q" value="{{ $query }}" placeholder="Cari Denpasar, Sanur, Ubud" aria-label="Cari lokasi">
-                    <button class="button button-primary" type="submit">Cari Lokasi</button>
+                    <input class="input" name="q" value="{{ $query }}" placeholder="{{ __('messages.tracking.location_placeholder') }}" aria-label="{{ __('messages.tracking.search_location') }}">
+                    <button class="button button-primary" type="submit">{{ __('messages.tracking.search_location') }}</button>
                 </form>
 
                 <div class="location-grid">
@@ -137,11 +137,11 @@
                             <p class="helper">{{ $location['address'] }}</p>
                             <div class="meta-grid">
                                 <div class="meta-item">
-                                    <div class="meta-label">Jam buka</div>
+                                    <div class="meta-label">{{ __('messages.tracking.open_hours') }}</div>
                                     <div class="meta-value">{{ $location['hours'] }}</div>
                                 </div>
                                 <div class="meta-item">
-                                    <div class="meta-label">Telepon</div>
+                                    <div class="meta-label">{{ __('messages.tracking.phone') }}</div>
                                     <div class="meta-value">{{ $location['phone'] }}</div>
                                 </div>
                             </div>
@@ -153,8 +153,8 @@
                         </article>
                     @empty
                         <article class="panel panel-muted">
-                            <strong>Lokasi tidak ditemukan</strong>
-                            <p class="helper">Coba cari berdasarkan area seperti Denpasar, Sanur, atau Ubud.</p>
+                            <strong>{{ __('messages.tracking.not_found_title') }}</strong>
+                            <p class="helper">{{ __('messages.tracking.not_found_copy') }}</p>
                         </article>
                     @endforelse
                 </div>

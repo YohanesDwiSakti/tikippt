@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Login')
+@section('title', __('messages.login.title'))
 
 @section('content')
     <section class="page-shell section" style="max-width: 720px;">
-        <p class="eyebrow">Akses internal</p>
-        <h1 style="font-size: 48px;">Login admin atau driver</h1>
-        <p class="lead">Masuk sesuai role untuk membuka dashboard internal.</p>
+        <p class="eyebrow">{{ __('messages.login.eyebrow') }}</p>
+        <h1 style="font-size: 48px;">{{ __('messages.login.heading') }}</h1>
+        <p class="lead">{{ __('messages.login.copy') }}</p>
 
         @if(session('auth_role'))
             <div class="notice notice-success">
-                Anda sedang login sebagai {{ session('auth_name') }}.
+                {{ __('messages.login.logged_in', ['name' => session('auth_name')]) }}
             </div>
         @endif
 
@@ -22,7 +22,7 @@
 
         @if($errors->any())
             <div class="notice notice-danger">
-                Email, password, dan role wajib diisi dengan benar.
+                {{ __('messages.login.error') }}
             </div>
         @endif
 
@@ -38,19 +38,19 @@
                 <input class="input" name="password" type="password" value="admin123" required>
             </div>
             <div class="field full">
-                <label>Role</label>
+                <label>{{ __('messages.login.role') }}</label>
                 <select class="select" name="role" required>
                     <option value="admin" @selected(old('role', 'admin') === 'admin')>Admin</option>
                     <option value="driver" @selected(old('role') === 'driver')>Driver</option>
                 </select>
-                <p class="helper">Login ini menyimpan session frontend. Integrasi backend auth dapat memakai endpoint Go yang sudah dibuat.</p>
+                <p class="helper">{{ __('messages.login.helper') }}</p>
             </div>
             <div class="full" style="display: flex; gap: 12px; flex-wrap: wrap;">
-                <button class="button button-primary" type="submit">Masuk</button>
+                <button class="button button-primary" type="submit">{{ __('messages.login.submit') }}</button>
                 @if(session('auth_role') === 'admin')
-                    <a class="button button-secondary" href="{{ route('admin.dashboard') }}">Buka Admin</a>
+                    <a class="button button-secondary" href="{{ route('admin.dashboard') }}">{{ __('messages.login.open_admin') }}</a>
                 @elseif(session('auth_role') === 'driver')
-                    <a class="button button-secondary" href="{{ route('driver.index') }}">Buka Driver</a>
+                    <a class="button button-secondary" href="{{ route('driver.index') }}">{{ __('messages.login.open_driver') }}</a>
                 @endif
             </div>
         </form>

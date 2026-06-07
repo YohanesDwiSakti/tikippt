@@ -14,6 +14,14 @@ function guardRole(string $role)
         ->with('auth_notice', 'Silakan login dulu untuk membuka halaman tersebut.');
 }
 
+Route::get('/language/{locale}', function (string $locale) {
+    abort_unless(in_array($locale, ['id', 'en'], true), 404);
+
+    session(['locale' => $locale]);
+
+    return redirect()->back();
+})->name('language.switch');
+
 $packages = [
     [
         'receipt' => 'TKI-DEN-260607101500',
