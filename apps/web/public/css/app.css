@@ -908,6 +908,15 @@ h3 {
     text-align: center;
 }
 
+.proof-capture-preview {
+    width: 100%;
+    max-height: 280px;
+    margin-top: 12px;
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    object-fit: cover;
+}
+
 .site-footer {
     flex-shrink: 0;
     border-top: 1px solid hsl(var(--border));

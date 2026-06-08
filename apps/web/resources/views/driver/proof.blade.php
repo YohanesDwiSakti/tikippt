@@ -36,8 +36,9 @@
                 @csrf
                 <div class="field full">
                     <label>Foto bukti</label>
-                    <input class="input" name="photo" type="file" accept="image/*" required>
-                    <p class="helper">Foto disimpan sebagai bukti pengantaran.</p>
+                    <input class="input" id="proof-photo" name="photo" type="file" accept="image/*" capture="environment" required>
+                    <img class="proof-capture-preview" id="proof-photo-preview" alt="Preview foto bukti" hidden>
+                    <p class="helper">Ambil foto paket langsung dari kamera HP.</p>
                 </div>
                 <div class="field">
                     <label>Waktu sampai</label>
@@ -65,4 +66,21 @@
             </form>
         </article>
     </section>
+
+    <script>
+        const proofPhotoInput = document.getElementById('proof-photo');
+        const proofPhotoPreview = document.getElementById('proof-photo-preview');
+
+        proofPhotoInput?.addEventListener('change', () => {
+            const [file] = proofPhotoInput.files || [];
+            if (!file) {
+                proofPhotoPreview.hidden = true;
+                proofPhotoPreview.removeAttribute('src');
+                return;
+            }
+
+            proofPhotoPreview.src = URL.createObjectURL(file);
+            proofPhotoPreview.hidden = false;
+        });
+    </script>
 @endsection
