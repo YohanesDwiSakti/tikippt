@@ -296,7 +296,7 @@ class SupabaseGateway
 
             return str_starts_with($signedUrl, 'http')
                 ? $signedUrl
-                : $this->url . $signedUrl;
+                : $this->url . '/storage/v1' . $signedUrl;
         } catch (RuntimeException) {
             return '';
         }
