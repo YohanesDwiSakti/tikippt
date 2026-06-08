@@ -255,8 +255,51 @@ class SupabaseGateway
                 'location' => $event['location'],
                 'time' => $this->formatTime($event['created_at']),
             ], $events),
-            'proof' => $proofs[0] ?? null,
+            'proof' => isset($proofs[0]) ? $this->hydrateProof($proofs[0]) : null,
         ];
+    }
+
+    private function hydrateProof(array $proof): array
+    {
+        $photoPath = $proof['photo_url'] ?? '';
+
+        return [
+            'photo' => $this->proofPhotoUrl($photoPath),
+            'photo_path' => $photoPath,
+            'time' => $this->formatTime($proof['delivered_at'] ?? null),
+            'location' => $proof['delivered_location'] ?? '-',
+            'note' => $proof['note'] ?? '-',
+            'latitude' => $proof['latitude'] ?? null,
+            'longitude' => $proof['longitude'] ?? null,
+        ];
+    }
+
+    private function proofPhotoUrl(string $path): string
+    {
+        if ($path === '') {
+            return '';
+        }
+
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+
+        try {
+            $signed = $this->request('post', '/storage/v1/object/sign/delivery-proofs/' . ltrim($path, '/'), $this->serviceKey, [
+                'expiresIn' => 3600,
+            ]);
+
+            $signedUrl = $signed['signedURL'] ?? $signed['signedUrl'] ?? '';
+            if ($signedUrl === '') {
+                return '';
+            }
+
+            return str_starts_with($signedUrl, 'http')
+                ? $signedUrl
+                : $this->url . $signedUrl;
+        } catch (RuntimeException) {
+            return '';
+        }
     }
 
     private function latestAssignment(string $packageId): ?array

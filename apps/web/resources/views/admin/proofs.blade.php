@@ -17,7 +17,13 @@
 
             @forelse($packages as $package)
                 <article class="panel proof-preview">
-                    <img class="proof-image" src="{{ $package['proof']['photo'] }}" alt="Bukti delivery {{ $package['receipt'] }}">
+                    @if($package['proof']['photo'])
+                        <img class="proof-image" src="{{ $package['proof']['photo'] }}" alt="Bukti delivery {{ $package['receipt'] }}">
+                    @else
+                        <div class="proof-image proof-image-empty">
+                            Foto belum tersedia
+                        </div>
+                    @endif
                     <div>
                         <span class="badge badge-success">{{ $package['status'] }}</span>
                         <h2 style="margin-top: 16px;">{{ $package['receipt'] }}</h2>
