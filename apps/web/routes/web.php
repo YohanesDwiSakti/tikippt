@@ -247,6 +247,14 @@ Route::get('/driver', function (SupabaseGateway $supabase) {
     ]);
 })->name('driver.index');
 
+Route::get('/driver/proof', function () {
+    if ($redirect = guardRole('driver')) {
+        return $redirect;
+    }
+
+    return redirect()->route('driver.index');
+});
+
 Route::get('/driver/proof/{receipt}', function (string $receipt, SupabaseGateway $supabase) {
     if ($redirect = guardRole('driver')) {
         return $redirect;
@@ -259,13 +267,14 @@ Route::get('/driver/proof/{receipt}', function (string $receipt, SupabaseGateway
     return view('driver.proof', ['package' => $package]);
 })->name('driver.proof');
 
-Route::post('/driver/proof/{receipt}', function (string $receipt, Request $request, SupabaseGateway $supabase) {
+Route::post('/driver/proof', function (Request $request, SupabaseGateway $supabase) {
     if ($redirect = guardRole('driver')) {
         return $redirect;
     }
 
     $data = $request->validate([
-        'photo' => ['required', 'image', 'max:4096'],
+        'receipt' => ['required', 'string'],
+        'photo' => ['required', 'image', 'max:10240'],
         'delivered_at' => ['required', 'date'],
         'delivered_location' => ['required', 'string', 'max:160'],
         'latitude' => ['nullable', 'numeric'],
@@ -274,10 +283,42 @@ Route::post('/driver/proof/{receipt}', function (string $receipt, Request $reque
     ]);
 
     try {
-        $supabase->submitProof($receipt, session('auth_id'), $data + ['photo_url' => ''], $request->file('photo'));
+        $supabase->submitProof($data['receipt'], session('auth_id'), $data + ['photo_url' => ''], $request->file('photo'));
     } catch (\Throwable $error) {
-        return back()->withErrors(['photo' => $error->getMessage()])->withInput();
+        return redirect()
+            ->route('driver.proof', ['receipt' => $data['receipt']])
+            ->withErrors(['photo' => $error->getMessage()])
+            ->withInput();
     }
 
     return redirect()->route('driver.index')->with('status', 'Bukti berhasil dikirim.');
 })->name('driver.proof.store');
+
+Route::post('/driver/proof/{receipt}', function (string $receipt, Request $request, SupabaseGateway $supabase) {
+    if ($redirect = guardRole('driver')) {
+        return $redirect;
+    }
+
+    $request->merge(['receipt' => $receipt]);
+
+    $data = $request->validate([
+        'receipt' => ['required', 'string'],
+        'photo' => ['required', 'image', 'max:10240'],
+        'delivered_at' => ['required', 'date'],
+        'delivered_location' => ['required', 'string', 'max:160'],
+        'latitude' => ['nullable', 'numeric'],
+        'longitude' => ['nullable', 'numeric'],
+        'note' => ['nullable', 'string', 'max:500'],
+    ]);
+
+    try {
+        $supabase->submitProof($data['receipt'], session('auth_id'), $data + ['photo_url' => ''], $request->file('photo'));
+    } catch (\Throwable $error) {
+        return redirect()
+            ->route('driver.proof', ['receipt' => $data['receipt']])
+            ->withErrors(['photo' => $error->getMessage()])
+            ->withInput();
+    }
+
+    return redirect()->route('driver.index')->with('status', 'Bukti berhasil dikirim.');
+});

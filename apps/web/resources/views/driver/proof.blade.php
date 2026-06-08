@@ -32,8 +32,9 @@
             @if($errors->any())
                 <div class="notice notice-danger">{{ $errors->first() }}</div>
             @endif
-            <form class="form-grid" method="POST" action="/driver/proof/{{ $package['receipt'] }}" enctype="multipart/form-data">
+            <form class="form-grid" method="POST" action="/driver/proof" enctype="multipart/form-data">
                 @csrf
+                <input type="hidden" name="receipt" value="{{ $package['receipt'] }}">
                 <div class="field full">
                     <label>Foto bukti</label>
                     <input class="input" id="proof-photo" name="photo" type="file" accept="image/*" capture="environment" required>
