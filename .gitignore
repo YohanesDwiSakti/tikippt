@@ -67,3 +67,4 @@ storage/framework/views/*.php
 # /CLAUDE.md
 # /HOW_TO_USE_THIS_TEMPLATE.md
 # /docs/
+.vercel
