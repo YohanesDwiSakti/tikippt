@@ -152,12 +152,20 @@ Route::get('/', function (SupabaseGateway $supabase) {
     ]);
 })->name('home');
 
-Route::get('/tracking', function (SupabaseGateway $supabase) use ($locations) {
+Route::get('/tracking', function () use ($locations) {
     $receipt = request('receipt');
-    $selected = $receipt ? $supabase->packageByReceipt($receipt) : null;
     $activeTab = request('tab', 'resi');
     if (! in_array($activeTab, ['resi', 'harga', 'lokasi'], true)) {
         $activeTab = 'resi';
+    }
+    $selected = null;
+
+    if ($activeTab === 'resi' && $receipt) {
+        try {
+            $selected = app(SupabaseGateway::class)->packageByReceipt($receipt);
+        } catch (\Throwable) {
+            $selected = null;
+        }
     }
 
     $origin = request('origin', '');
