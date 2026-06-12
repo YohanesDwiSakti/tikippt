@@ -99,8 +99,31 @@
 
                 <div class="section-tight">
                     <p class="helper">{{ __('messages.tracking.price_note') }}</p>
-                    @if(count($rates) > 0)
-                        <p class="helper">{{ __('messages.tracking.billable_weight', ['weight' => $chargeableWeight]) }} @if($volumeWeight > 0) {{ __('messages.tracking.volume_weight', ['weight' => $volumeWeight]) }} @endif.</p>
+                    @if($calculation)
+                        <article class="panel calculation-panel">
+                            <div>
+                                <p class="eyebrow">{{ __('messages.tracking.calculation_title') }}</p>
+                                <h3>{{ __('messages.tracking.calculation_heading') }}</h3>
+                            </div>
+                            <div class="calculation-grid">
+                                <div class="meta-item">
+                                    <div class="meta-label">{{ __('messages.tracking.actual_weight') }}</div>
+                                    <div class="meta-value">{{ rtrim(rtrim(number_format($calculation['actual_weight'], 2, ',', '.'), '0'), ',') }} kg</div>
+                                </div>
+                                <div class="meta-item">
+                                    <div class="meta-label">{{ __('messages.tracking.volume_formula') }}</div>
+                                    <div class="meta-value">{{ rtrim(rtrim(number_format($calculation['length'], 2, ',', '.'), '0'), ',') }} x {{ rtrim(rtrim(number_format($calculation['width'], 2, ',', '.'), '0'), ',') }} x {{ rtrim(rtrim(number_format($calculation['height'], 2, ',', '.'), '0'), ',') }} / 6000 = {{ $calculation['volume_weight'] }} kg</div>
+                                </div>
+                                <div class="meta-item">
+                                    <div class="meta-label">{{ __('messages.tracking.billable_label') }}</div>
+                                    <div class="meta-value">max({{ rtrim(rtrim(number_format($calculation['actual_weight'], 2, ',', '.'), '0'), ',') }}, {{ $calculation['volume_weight'] }}) = {{ $calculation['chargeable_weight'] }} kg</div>
+                                </div>
+                                <div class="meta-item">
+                                    <div class="meta-label">{{ __('messages.tracking.area_rate') }}</div>
+                                    <div class="meta-value">Rp{{ number_format($calculation['base_rate'], 0, ',', '.') }} + Rp{{ number_format($calculation['route_surcharge'], 0, ',', '.') }} = Rp{{ number_format($calculation['rate_per_kg'], 0, ',', '.') }}/kg</div>
+                                </div>
+                            </div>
+                        </article>
                     @endif
                     <div class="rate-grid">
                         @forelse($rates as $rate)
@@ -108,6 +131,13 @@
                                 <span class="badge badge-brand">{{ $rate['service'] }}</span>
                                 <h3 style="margin-top: 16px;">{{ $rate['label'] }}</h3>
                                 <p class="helper">{{ __('messages.tracking.route_eta', ['origin' => $origin, 'destination' => $destination, 'eta' => $rate['eta']]) }}</p>
+                                @if($calculation)
+                                    <p class="helper">{{ __('messages.tracking.service_formula', [
+                                        'rate' => 'Rp' . number_format($calculation['rate_per_kg'], 0, ',', '.'),
+                                        'weight' => $calculation['chargeable_weight'],
+                                        'multiplier' => rtrim(rtrim(number_format($rate['multiplier'], 2, ',', '.'), '0'), ','),
+                                    ]) }}</p>
+                                @endif
                                 <div class="price">Rp{{ number_format($rate['price'], 0, ',', '.') }}</div>
                             </article>
                         @empty

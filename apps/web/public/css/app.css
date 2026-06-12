@@ -867,6 +867,19 @@ h3 {
     font-weight: 700;
 }
 
+.calculation-panel {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 16px;
+    box-shadow: none;
+}
+
+.calculation-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
 .location-card {
     display: grid;
     align-content: start;
@@ -1028,7 +1041,8 @@ h3 {
     .map-layout,
     .form-grid,
     .rate-grid,
-    .location-grid {
+    .location-grid,
+    .calculation-grid {
         grid-template-columns: 1fr;
     }
 

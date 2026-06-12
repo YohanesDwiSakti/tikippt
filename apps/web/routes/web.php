@@ -121,18 +121,21 @@ function shippingEstimates(string $origin, string $destination, int $chargeableW
             'service' => 'REG',
             'label' => 'Regular',
             'eta' => '1-2 hari kerja',
+            'multiplier' => 1,
             'price' => max(10000, ($base + $routeSurcharge) * $chargeableWeight),
         ],
         [
             'service' => 'ONS',
             'label' => 'Over Night Service',
             'eta' => 'hari kerja berikutnya',
+            'multiplier' => 1.65,
             'price' => max(18000, (int) ceil(($base + $routeSurcharge) * 1.65 * $chargeableWeight)),
         ],
         [
             'service' => 'ECO',
             'label' => 'Economy',
             'eta' => '3-5 hari kerja',
+            'multiplier' => 0.82,
             'price' => max(8000, (int) ceil(($base + $routeSurcharge) * 0.82 * $chargeableWeight)),
         ],
     ];
@@ -166,6 +169,20 @@ Route::get('/tracking', function (SupabaseGateway $supabase) use ($locations) {
     $volumeWeight = $length > 0 && $width > 0 && $height > 0 ? ceil(($length * $width * $height) / 6000) : 0;
     $chargeableWeight = (int) ceil(max($weight, $volumeWeight));
     $rates = shippingEstimates($origin, $destination, $chargeableWeight);
+    $baseRate = serviceAreaRate($destination);
+    $routeSurcharge = str_contains(strtolower($origin), 'denpasar') ? 0 : 3000;
+    $ratePerKg = $baseRate + $routeSurcharge;
+    $calculation = count($rates) > 0 ? [
+        'actual_weight' => $weight,
+        'length' => $length,
+        'width' => $width,
+        'height' => $height,
+        'volume_weight' => $volumeWeight,
+        'chargeable_weight' => $chargeableWeight,
+        'base_rate' => $baseRate,
+        'route_surcharge' => $routeSurcharge,
+        'rate_per_kg' => $ratePerKg,
+    ] : null;
 
     $locationQuery = strtolower(trim(request('q', '')));
     $filteredLocations = $locationQuery === ''
@@ -189,6 +206,7 @@ Route::get('/tracking', function (SupabaseGateway $supabase) use ($locations) {
         'height' => request('height', ''),
         'chargeableWeight' => $chargeableWeight,
         'volumeWeight' => $volumeWeight,
+        'calculation' => $calculation,
         'rates' => $rates,
         'query' => request('q', ''),
         'locations' => $filteredLocations,
