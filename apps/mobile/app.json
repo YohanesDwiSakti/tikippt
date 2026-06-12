@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "FINPROPPT Mobile",
+    "slug": "finproppt-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "scheme": "finproppt",
+    "splash": {
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Kamera dipakai driver untuk mengambil foto bukti pengantaran.",
+        "NSLocationWhenInUseUsageDescription": "Lokasi dipakai driver untuk mengirim titik bukti pengantaran."
+      }
+    },
+    "android": {
+      "permissions": [
+        "CAMERA",
+        "ACCESS_FINE_LOCATION"
+      ]
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "extra": {
+      "apiBaseUrl": "http://127.0.0.1:5000/api/v1"
+    }
+  }
+}

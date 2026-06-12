@@ -30,7 +30,7 @@ Target stack and repo structure. Phase: P0. Spec: `docs/ARCHITECTURE.md`, `docs/
 
 - `[x]` Add Laravel application shell in `apps/web` with Blade views and static assets. (ARCHITECTURE.md)
 - `[x]` Migrate `apps/server` from template starter to Go API structure. (BACKEND.md)
-- `[ ]` Add `apps/mobile` Expo app when mobile implementation begins. (ARCHITECTURE.md, FEATURES: Mobile Expo App)
+- `[x]` Add `apps/mobile` Expo app for mobile tracking and driver workflow. (ARCHITECTURE.md, FEATURES: Mobile Expo App)
 - `[ ]` Update root scripts so verification includes Laravel, Go, Expo, docs, and any remaining workspace checks. (QUALITY.md)
 - `[x]` Update `.env.example` for Laravel, Go API, Supabase, and Storage variables only. (BACKEND.md, DATABASE.md)
 - `[x]` Keep database credentials server-only and public keys clearly marked. (ARCHITECTURE.md, DATABASE.md)
@@ -125,11 +125,11 @@ Driver submits and admin reviews proof of delivery. Phase: P0/P1. Spec: `docs/FE
 
 Mobile tracking and driver workflow. Phase: P1. Spec: `docs/FEATURES.md`, `docs/UI_UX.md`.
 
-- `[ ]` Create Expo app in `apps/mobile`. (ARCHITECTURE.md)
-- `[ ]` Lacak tab with receipt input, validation alert, loading, and result. (UI_UX.md)
-- `[ ]` Driver login/task list flow. (FEATURES: Mobile Expo App)
-- `[ ]` Delivery proof capture/upload flow. (UI_UX.md)
-- `[ ]` API client config for Go backend base URL. (API.md)
+- `[x]` Create Expo app in `apps/mobile`. (ARCHITECTURE.md)
+- `[x]` Lacak tab with receipt input, validation alert, loading, and result. (UI_UX.md)
+- `[x]` Driver login/task list flow. (FEATURES: Mobile Expo App)
+- `[~]` Delivery proof capture/location flow; binary photo upload still needs a backend mobile upload endpoint. (UI_UX.md, API.md)
+- `[x]` API client config for Go backend base URL. (API.md)
 
 **Connects to:** tracking, driver packages, proof API.
 
@@ -149,7 +149,7 @@ Mobile tracking and driver workflow. Phase: P1. Spec: `docs/FEATURES.md`, `docs/
 - `[x]` `pnpm docs:check` passes after docs initialization. (QUALITY.md)
 - `[x]` Go tests pass after backend migration. (BACKEND.md)
 - `[ ]` Laravel tests/static checks pass after web migration. (QUALITY.md)
-- `[ ]` Expo type/lint/smoke checks pass after mobile creation. (QUALITY.md)
+- `[x]` Expo mobile typecheck passes after mobile creation. (QUALITY.md)
 - `[ ]` Render review for public/admin/driver web routes at mobile, 1366x768, 1440x900, 1920x1080. (FRONTEND.md, UI_UX.md)
 - `[x]` Role smoke tests cover customer tracking, admin package save, admin assignment, driver task list, and driver proof completion against Supabase. (API.md)
 

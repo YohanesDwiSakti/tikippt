@@ -30,7 +30,7 @@ supabase/
   seed.sql    -> empty unless approved real reference data is needed
 ```
 
-`apps/mobile` does not exist yet and should be created only when mobile implementation starts. `apps/web` and `apps/server` may need to be migrated from the current template starter to Laravel and Go.
+`apps/mobile` now contains the Expo mobile app for customer tracking and driver proof workflows. `apps/web` and `apps/server` remain the Laravel and Go implementation surfaces.
 
 ## Application Boundaries
 
