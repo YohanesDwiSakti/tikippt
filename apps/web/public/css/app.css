@@ -884,6 +884,14 @@ h3 {
     padding: 6px 10px;
 }
 
+.location-actions {
+    margin-top: 16px;
+}
+
+.location-actions .button {
+    width: 100%;
+}
+
 .proof-preview {
     display: grid;
     grid-template-columns: 180px 1fr;

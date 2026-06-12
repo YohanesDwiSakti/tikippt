@@ -58,11 +58,11 @@
                     <input type="hidden" name="tab" value="harga">
                     <div class="field">
                         <label>{{ __('messages.tracking.from') }}</label>
-                        <input class="input" name="origin" value="{{ $origin }}">
+                        <input class="input" name="origin" value="{{ $origin }}" placeholder="Denpasar">
                     </div>
                     <div class="field">
                         <label>{{ __('messages.tracking.destination') }}</label>
-                        <input class="input" name="destination" value="{{ $destination }}">
+                        <input class="input" name="destination" value="{{ $destination }}" placeholder="Gianyar, Sanur, Ubud">
                     </div>
                     <div class="field">
                         <label>{{ __('messages.tracking.weight') }}</label>
@@ -98,6 +98,7 @@
                 </form>
 
                 <div class="section-tight">
+                    <p class="helper">{{ __('messages.tracking.price_note') }}</p>
                     @if(count($rates) > 0)
                         <p class="helper">{{ __('messages.tracking.billable_weight', ['weight' => $chargeableWeight]) }} @if($volumeWeight > 0) {{ __('messages.tracking.volume_weight', ['weight' => $volumeWeight]) }} @endif.</p>
                     @endif
@@ -132,7 +133,7 @@
 
                 <form class="tracking-form" action="{{ route('tracking') }}" method="get" style="margin-bottom: 24px;">
                     <input type="hidden" name="tab" value="lokasi">
-                    <input class="input" name="q" value="{{ $query }}" aria-label="{{ __('messages.tracking.search_location') }}">
+                    <input class="input" name="q" value="{{ $query }}" placeholder="Kapten Regug, Gatsu, Nangka" aria-label="{{ __('messages.tracking.search_location') }}">
                     <button class="button button-primary" type="submit">{{ __('messages.tracking.search_location') }}</button>
                 </form>
 
@@ -156,6 +157,9 @@
                                 @foreach($location['services'] as $service)
                                     <span>{{ $service }}</span>
                                 @endforeach
+                            </div>
+                            <div class="location-actions">
+                                <a class="button button-secondary" href="{{ $location['maps_url'] }}" target="_blank" rel="noopener noreferrer">{{ __('messages.tracking.open_maps') }}</a>
                             </div>
                         </article>
                     @empty

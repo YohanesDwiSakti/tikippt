@@ -28,7 +28,115 @@ Route::get('/language/{locale}', function (string $locale) {
     return redirect()->back();
 })->name('language.switch');
 
-$locations = [];
+$locations = [
+    [
+        'name' => 'TIKI Cabang Denpasar',
+        'type' => 'Hub Cabang',
+        'address' => 'Jl. Kapten Regug No. 1, Denpasar, Bali 80232',
+        'hours' => 'Senin-Jumat 08.00-18.00, Sabtu 08.00-16.00, Minggu 10.00-15.00',
+        'phone' => '(0361) 223049 / 223977',
+        'services' => ['Drop paket', 'Ambil paket', 'Bantuan resi'],
+        'maps_url' => 'https://www.google.com/maps/search/?api=1&query=TIKI+Denpasar+Jl+Kapten+Regug+No+1',
+    ],
+    [
+        'name' => 'TIKI Denpasar Gatot Subroto',
+        'type' => 'Gerai',
+        'address' => 'Jl. Gatot Subroto Barat No. 293A, Denpasar',
+        'hours' => 'Senin-Jumat 08.00-20.30, Sabtu 08.00-19.00',
+        'phone' => 'Kontak gerai',
+        'services' => ['Drop paket', 'Estimasi ongkir'],
+        'maps_url' => 'https://www.google.com/maps/search/?api=1&query=TIKI+Gatot+Subroto+Barat+293A+Denpasar',
+    ],
+    [
+        'name' => 'TIKI Ahmad Yani Utara',
+        'type' => 'Agen',
+        'address' => 'Jl. Ahmad Yani Utara No. 165, Denpasar',
+        'hours' => 'Ikuti jam operasional gerai',
+        'phone' => '(0361) 7422448',
+        'services' => ['Drop paket', 'Bantuan pengiriman'],
+        'maps_url' => 'https://www.google.com/maps/search/?api=1&query=TIKI+Ahmad+Yani+Utara+165+Denpasar',
+    ],
+    [
+        'name' => 'TIKI Nangka',
+        'type' => 'Agen',
+        'address' => 'Jl. Nangka No. 120, Denpasar',
+        'hours' => 'Ikuti jam operasional gerai',
+        'phone' => '(0361) 8853416',
+        'services' => ['Drop paket', 'Bantuan pengiriman'],
+        'maps_url' => 'https://www.google.com/maps/search/?api=1&query=TIKI+Nangka+120+Denpasar',
+    ],
+    [
+        'name' => 'TIKI Kerobokan',
+        'type' => 'Agen Sekitar Denpasar',
+        'address' => 'Jl. Raya Kerobokan No. 59X, Kerobokan',
+        'hours' => 'Ikuti jam operasional gerai',
+        'phone' => '(0361) 9187077',
+        'services' => ['Drop paket', 'Rute Badung utara'],
+        'maps_url' => 'https://www.google.com/maps/search/?api=1&query=TIKI+Raya+Kerobokan+59X',
+    ],
+];
+
+function serviceAreaRate(string $destination): int
+{
+    $normalized = strtolower($destination);
+
+    if (str_contains($normalized, 'denpasar')) {
+        return 7000;
+    }
+
+    if (str_contains($normalized, 'badung') || str_contains($normalized, 'kerobokan') || str_contains($normalized, 'canggu') || str_contains($normalized, 'kuta')) {
+        return 9000;
+    }
+
+    if (str_contains($normalized, 'gianyar') || str_contains($normalized, 'ubud')) {
+        return 11000;
+    }
+
+    if (str_contains($normalized, 'tabanan')) {
+        return 12000;
+    }
+
+    if (str_contains($normalized, 'klungkung') || str_contains($normalized, 'bangli')) {
+        return 14000;
+    }
+
+    if (str_contains($normalized, 'buleleng') || str_contains($normalized, 'singaraja') || str_contains($normalized, 'karangasem') || str_contains($normalized, 'jembrana')) {
+        return 18000;
+    }
+
+    return 15000;
+}
+
+function shippingEstimates(string $origin, string $destination, int $chargeableWeight): array
+{
+    if (trim($origin) === '' || trim($destination) === '' || $chargeableWeight < 1) {
+        return [];
+    }
+
+    $base = serviceAreaRate($destination);
+    $routeSurcharge = str_contains(strtolower($origin), 'denpasar') ? 0 : 3000;
+
+    return [
+        [
+            'service' => 'REG',
+            'label' => 'Regular',
+            'eta' => '1-2 hari kerja',
+            'price' => max(10000, ($base + $routeSurcharge) * $chargeableWeight),
+        ],
+        [
+            'service' => 'ONS',
+            'label' => 'Over Night Service',
+            'eta' => 'hari kerja berikutnya',
+            'price' => max(18000, (int) ceil(($base + $routeSurcharge) * 1.65 * $chargeableWeight)),
+        ],
+        [
+            'service' => 'ECO',
+            'label' => 'Economy',
+            'eta' => '3-5 hari kerja',
+            'price' => max(8000, (int) ceil(($base + $routeSurcharge) * 0.82 * $chargeableWeight)),
+        ],
+    ];
+}
 
 Route::get('/', function (SupabaseGateway $supabase) {
     $receipt = request('receipt', '');
@@ -56,7 +164,8 @@ Route::get('/tracking', function (SupabaseGateway $supabase) use ($locations) {
     $width = max((float) request('width', 0), 0);
     $height = max((float) request('height', 0), 0);
     $volumeWeight = $length > 0 && $width > 0 && $height > 0 ? ceil(($length * $width * $height) / 6000) : 0;
-    $chargeableWeight = ceil(max($weight, $volumeWeight));
+    $chargeableWeight = (int) ceil(max($weight, $volumeWeight));
+    $rates = shippingEstimates($origin, $destination, $chargeableWeight);
 
     $locationQuery = strtolower(trim(request('q', '')));
     $filteredLocations = $locationQuery === ''
@@ -80,7 +189,7 @@ Route::get('/tracking', function (SupabaseGateway $supabase) use ($locations) {
         'height' => request('height', ''),
         'chargeableWeight' => $chargeableWeight,
         'volumeWeight' => $volumeWeight,
-        'rates' => [],
+        'rates' => $rates,
         'query' => request('q', ''),
         'locations' => $filteredLocations,
     ]);
