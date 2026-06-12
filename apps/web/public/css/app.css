@@ -836,6 +836,10 @@ h3 {
     padding-top: 32px;
 }
 
+.service-section {
+    scroll-margin-top: 112px;
+}
+
 .section-heading {
     display: flex;
     align-items: flex-end;

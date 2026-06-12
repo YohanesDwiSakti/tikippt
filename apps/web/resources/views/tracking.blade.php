@@ -13,13 +13,13 @@
         </div>
 
         <div class="tool-tabs" aria-label="Pilihan layanan publik">
-            <a href="{{ route('tracking', ['tab' => 'resi']) }}" @if($activeTab === 'resi') aria-current="page" @endif>{{ __('messages.tracking.tab_receipt') }}</a>
-            <a href="{{ route('tracking', ['tab' => 'harga']) }}" @if($activeTab === 'harga') aria-current="page" @endif>{{ __('messages.tracking.tab_price') }}</a>
-            <a href="{{ route('tracking', ['tab' => 'lokasi']) }}" @if($activeTab === 'lokasi') aria-current="page" @endif>{{ __('messages.tracking.tab_location') }}</a>
+            <a href="{{ route('tracking', ['tab' => 'resi']) }}#resi-panel" @if($activeTab === 'resi') aria-current="page" @endif>{{ __('messages.tracking.tab_receipt') }}</a>
+            <a href="{{ route('tracking', ['tab' => 'harga']) }}#harga-panel" @if($activeTab === 'harga') aria-current="page" @endif>{{ __('messages.tracking.tab_price') }}</a>
+            <a href="{{ route('tracking', ['tab' => 'lokasi']) }}#lokasi-panel" @if($activeTab === 'lokasi') aria-current="page" @endif>{{ __('messages.tracking.tab_location') }}</a>
         </div>
 
         @if($activeTab === 'resi')
-            <section class="service-section">
+            <section id="resi-panel" class="service-section">
                 <div class="section-heading">
                     <div>
                         <p class="eyebrow">{{ __('messages.tracking.tab_receipt') }}</p>
@@ -27,7 +27,7 @@
                     </div>
                 </div>
 
-                <form class="tracking-form" action="{{ route('tracking') }}" method="get" style="margin-bottom: 24px;">
+                <form class="tracking-form" action="{{ route('tracking') }}#resi-panel" method="get" style="margin-bottom: 24px;">
                     <input type="hidden" name="tab" value="resi">
                     <input class="input" name="receipt" value="{{ $receipt }}" aria-label="{{ __('messages.home.receipt_label') }}">
                     <button class="button button-primary" type="submit">{{ __('messages.tracking.tab_receipt') }}</button>
@@ -45,7 +45,7 @@
         @endif
 
         @if($activeTab === 'harga')
-            <section class="service-section">
+            <section id="harga-panel" class="service-section">
                 <div class="section-heading">
                     <div>
                         <p class="eyebrow">{{ __('messages.tracking.tab_price') }}</p>
@@ -54,7 +54,7 @@
                     </div>
                 </div>
 
-                <form class="panel form-grid" action="{{ route('tracking') }}" method="get">
+                <form class="panel form-grid" action="{{ route('tracking') }}#harga-panel" method="get">
                     <input type="hidden" name="tab" value="harga">
                     <div class="field">
                         <label>{{ __('messages.tracking.from') }}</label>
@@ -122,7 +122,7 @@
         @endif
 
         @if($activeTab === 'lokasi')
-            <section class="service-section">
+            <section id="lokasi-panel" class="service-section">
                 <div class="section-heading">
                     <div>
                         <p class="eyebrow">{{ __('messages.tracking.tab_location') }}</p>
@@ -131,7 +131,7 @@
                     </div>
                 </div>
 
-                <form class="tracking-form" action="{{ route('tracking') }}" method="get" style="margin-bottom: 24px;">
+                <form class="tracking-form" action="{{ route('tracking') }}#lokasi-panel" method="get" style="margin-bottom: 24px;">
                     <input type="hidden" name="tab" value="lokasi">
                     <input class="input" name="q" value="{{ $query }}" placeholder="Kapten Regug, Gatsu, Nangka" aria-label="{{ __('messages.tracking.search_location') }}">
                     <button class="button button-primary" type="submit">{{ __('messages.tracking.search_location') }}</button>
