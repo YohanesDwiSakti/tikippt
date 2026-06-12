@@ -31,7 +31,7 @@
   "env": {
     "APP_ENV": "production",
     "APP_DEBUG": "false",
-    "APP_URL": "https://web-darkflame.vercel.app",
+    "APP_URL": "https://tiki-denpasar.vercel.app",
     "SESSION_DRIVER": "cookie",
     "CACHE_STORE": "array",
     "VIEW_COMPILED_PATH": "/tmp/finproppt/views",
